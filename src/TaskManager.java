@@ -5,16 +5,15 @@ public class TaskManager {
     static HashMap<Integer, Epic> epics = new HashMap<>();
     static HashMap<Integer, Subtask> subtasks = new HashMap<>();
 
-    /*static void printTasks() {
-        if (!tasks.isEmpty()) {
-            for (Task task : tasks.values()) {
-                System.out.println(task);
-            }
-        } else {
-            System.out.println("Список задач пуст.");
+    static void printOfTypeTasks(Object o) {
+        if (o == tasks) {
+            Task.printTasks(tasks);
+        } else if (o == subtasks) {
+            Subtask.printSubTasks(subtasks);
+        } else if (o == epics) {
+            Epic.printEpics(epics);
         }
     }
-
 
     static void deleteAllTasks() {
         tasks.clear();
@@ -26,6 +25,10 @@ public class TaskManager {
         System.out.println("Задача удалена.");
     }
 
+    public static Task getTasksForId(int taskId) {
+        return tasks.get(taskId);
+    }
+
     static void setTasks(int taskID, Task task) {
         if (tasks.containsKey(taskID)) {
             tasks.put(taskID, task);
@@ -34,7 +37,7 @@ public class TaskManager {
             tasks.put(taskID, task);
             System.out.println("Задача заведена.");
         }
-    }*/
+    }
 
     static void subEpicTaskPrint(int epicID) {
         for (Subtask sub : subtasks.values()) {
@@ -43,6 +46,7 @@ public class TaskManager {
             }
         }
     }
+    /*
     static void printSubTasks() {
         if (!subtasks.isEmpty()) {
             for (Task subtask : subtasks.values()) {
@@ -115,5 +119,5 @@ public class TaskManager {
             epics.put(taskID, epic);
             System.out.println("Задача заведена.");
         }
-    }
+    }*/
 }

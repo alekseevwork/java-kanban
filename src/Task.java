@@ -5,7 +5,7 @@ public class Task {
     String title;
     String description;
     int taskID;
-    private StatusTask statusTask;
+    private final StatusTask statusTask;
 
     public Task(String title, String description, StatusTask statusTask) {
         this.title = title;
@@ -40,10 +40,6 @@ public class Task {
         return Objects.hash(title, description, taskID, statusTask);
     }
 
-    public void setStatusTask(StatusTask statusTask) {
-        this.statusTask = statusTask;
-    }
-
     static void printTasks(HashMap<Integer, Task> tasks) {
         if (!tasks.isEmpty()) {
             for (Task task : tasks.values()) {
@@ -62,6 +58,10 @@ public class Task {
     static void deleteTasksForID(int taskID, HashMap<Integer, Task> tasks) {
         tasks.remove(taskID);
         System.out.println("Задача удалена.");
+    }
+
+    public static Task getTasksForId(int taskId, HashMap<Integer, Task> tasks) {
+        return tasks.get(taskId);
     }
 
     static void setTasks(int taskID, Task task, HashMap<Integer, Task> tasks) {
