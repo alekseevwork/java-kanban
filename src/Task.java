@@ -4,7 +4,7 @@ import java.util.Objects;
 public class Task {
     String title;
     String description;
-    int taskID;
+    private int taskID;
     private final StatusTask statusTask;
 
     public Task(String title, String description, StatusTask statusTask) {
@@ -40,37 +40,20 @@ public class Task {
         return Objects.hash(title, description, taskID, statusTask);
     }
 
-    static void printTasks(HashMap<Integer, Task> tasks) {
-        if (!tasks.isEmpty()) {
-            for (Task task : tasks.values()) {
-                System.out.println(task);
-            }
+    static void printTasks(Object tasks) {
+        if (!tasks.toString().equals("{}")) {
+            System.out.println(tasks);
         } else {
             System.out.println("Список задач пуст.");
         }
     }
 
-    static void deleteAllTasks(HashMap<Integer, Task> tasks) {
-        tasks.clear();
-        System.out.println("Задачи удалены.");
+    public static Task getTasksForId(int taskID, HashMap<Integer, Task> tasks) {
+        return tasks.get(taskID);
     }
 
-    static void deleteTasksForID(int taskID, HashMap<Integer, Task> tasks) {
-        tasks.remove(taskID);
-        System.out.println("Задача удалена.");
-    }
 
-    public static Task getTasksForId(int taskId, HashMap<Integer, Task> tasks) {
-        return tasks.get(taskId);
-    }
-
-    static void setTasks(int taskID, Task task, HashMap<Integer, Task> tasks) {
-        if (tasks.containsKey(taskID)) {
-            tasks.put(taskID, task);
-            System.out.println("Задача изменена.");
-        } else {
-            tasks.put(taskID, task);
-            System.out.println("Задача заведена.");
-        }
+    public int getTaskID() {
+        return taskID;
     }
 }

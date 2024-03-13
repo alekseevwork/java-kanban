@@ -5,24 +5,46 @@ public class TaskManager {
     static HashMap<Integer, Epic> epics = new HashMap<>();
     static HashMap<Integer, Subtask> subtasks = new HashMap<>();
 
-    static void printOfTypeTasks(Object o) {
-        if (o == tasks) {
+    static void printOfTypeTasks(Object object) {
+        if (object == tasks) {
             Task.printTasks(tasks);
-        } else if (o == subtasks) {
-            Subtask.printSubTasks(subtasks);
-        } else if (o == epics) {
-            Epic.printEpics(epics);
+        } else if (object == subtasks) {
+            Subtask.printTasks(subtasks);
+        } else if (object == epics) {
+            Epic.printTasks(epics);
         }
     }
 
-    static void deleteAllTasks() {
-        tasks.clear();
+    static void deleteTypeTasks(Object object) {
+        if (object == tasks) {
+            tasks.clear();
+        } else if (object == subtasks) {
+            subtasks.clear();
+        } else if (object == epics) {
+            epics.clear();
+        }
         System.out.println("Задачи удалены.");
     }
 
     static void deleteTasksForID(int taskID) {
         tasks.remove(taskID);
         System.out.println("Задача удалена.");
+    }
+    static void deleteSubTasksForID(int taskID) {
+        subtasks.remove(taskID);
+        System.out.println("Задача удалена.");
+    }
+
+    static void deleteEpicForID(int taskID) {
+        int epicID = epics.get(taskID).getTaskID();
+        if (!epics.isEmpty() && !epics.containsKey(taskID)) {
+            epics.remove(taskID);
+            System.out.println("Задача удалена.");
+            while (subtasks.containsKey(epicID)) {
+                deleteSubTasksForID(epicID);
+            }
+        }
+        System.out.println("Связанные подзадачи удалены.");
     }
 
     public static Task getTasksForId(int taskId) {
@@ -38,35 +60,6 @@ public class TaskManager {
             System.out.println("Задача заведена.");
         }
     }
-
-    static void subEpicTaskPrint(int epicID) {
-        for (Subtask sub : subtasks.values()) {
-            if (epicID == sub.epicID) {
-                System.out.println(sub);
-            }
-        }
-    }
-    /*
-    static void printSubTasks() {
-        if (!subtasks.isEmpty()) {
-            for (Task subtask : subtasks.values()) {
-                System.out.println(subtask);
-            }
-        } else {
-            System.out.println("Список задач пуст.");
-        }
-    }
-
-    static void deleteAllSubTasks() {
-        subtasks.clear();
-        System.out.println("Задачи удалены.");
-    }
-
-    static void deleteSubTasksForID(int taskID) {
-        subtasks.remove(taskID);
-        System.out.println("Задача удалена.");
-    }
-
     static void setSubtasks(int subtaskID, Subtask task) {
         if (subtasks.containsKey(subtaskID)) {
             subtasks.put(subtaskID, task);
@@ -77,40 +70,6 @@ public class TaskManager {
         }
     }
 
-    static void epicTaskPrint(int epicID) {
-        for (Subtask sub : subtasks.values()) {
-            if (epicID == sub.epicID) {
-                System.out.println(sub);
-            }
-        }
-    }
-    static void printEpics() {
-        if (!subtasks.isEmpty()) {
-            for (Task subtask : subtasks.values()) {
-                System.out.println(subtask);
-            }
-        } else {
-            System.out.println("Список задач пуст.");
-        }
-    }
-
-    static void deleteAllEpics() {
-        subtasks.clear();
-        System.out.println("Задачи удалены.");
-    }
-
-    static void deleteEpicForID(int taskID) {
-        int epicID = epics.get(taskID).getID();
-        if (!epics.isEmpty() && !epics.containsKey(taskID)) {
-            epics.remove(taskID);
-            System.out.println("Задача удалена.");
-            while (subtasks.containsKey(epicID)) {
-                deleteSubTasksForID(epicID);
-            }
-        }
-        System.out.println("Связанные подзадачи удалены.");
-    }
-
     static void setEpics(int taskID, Epic epic) {
         if (epics.containsKey(taskID)) {
             epics.put(taskID, epic);
@@ -119,5 +78,23 @@ public class TaskManager {
             epics.put(taskID, epic);
             System.out.println("Задача заведена.");
         }
+    }
+    static void subEpicTaskPrint(int epicID) {
+        for (Subtask sub : subtasks.values()) {
+            if (epicID == sub.epicID) {
+                System.out.println(sub);
+            }
+        }
+    }
+
+    /*
+
+    static void epicTaskPrint(int epicID) {
+        for (Subtask sub : subtasks.values()) {
+            if (epicID == sub.epicID) {
+                System.out.println(sub);
+            }
+        }
+    }
     }*/
 }
