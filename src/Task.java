@@ -4,8 +4,8 @@ import java.util.Objects;
 public class Task {
     String title;
     String description;
-    private int taskID;
-    private final StatusTask statusTask;
+    private final int taskID;
+    protected StatusTask statusTask;
 
     public Task(String title, String description, StatusTask statusTask) {
         this.title = title;
@@ -48,12 +48,9 @@ public class Task {
         }
     }
 
-    public static Task getTasksForId(int taskID, HashMap<Integer, Task> tasks) {
-        return tasks.get(taskID);
-    }
-
-
     public int getTaskID() {
         return taskID;
     }
+
+
 }
