@@ -13,15 +13,15 @@ public class TaskManager {
         } else if (object == epics) {
             Epic.printTasks(epics);
         }
-    }  //print done
+    }
 
-    static void subEpicTaskPrint(int epicID) {
+    static void printOfSubtasksInEpic(int epicID) {
         for (Subtask sub : subtasks.values()) {
             if (epicID == sub.epicID) {
                 System.out.println(sub);
             }
         }
-    }  // print all Subtask in Epic done
+    }
 
     static void deleteTypeTasks(Object object) {
         if (object == tasks) {
@@ -32,14 +32,16 @@ public class TaskManager {
             epics.clear();
         }
         System.out.println("Задачи удалены.");
-    } // all Tasks delete done
+    }
 
     static void deleteTasksForID(int taskID) {
         tasks.remove(taskID);
         System.out.println("Задача удалена.");
-    }         // delete for ID done
+    }
     static void deleteSubTasksForID(int taskID) {
+        int epicID = getSubTaskForId(taskID).epicID;
         subtasks.remove(taskID);
+        Epic.checkStatusSubtasks(subtasks, getEpicForId(epicID));
         System.out.println("Задача удалена.");
     }
     static void deleteEpicForID(int taskID) {
@@ -62,7 +64,7 @@ public class TaskManager {
             tasks.put(taskID, task);
             System.out.println("Задача заведена.");
         }
-    }             // setTask done
+    }
     static void setSubtasks(int subtaskID, Subtask task) {
         if (subtasks.containsKey(subtaskID)) {
             subtasks.put(subtaskID, task);
@@ -72,7 +74,7 @@ public class TaskManager {
             System.out.println("Задача заведена.");
         }
         Epic.checkStatusSubtasks(subtasks, getEpicForId(task.epicID));
-    }  // update status Epic done
+    }
     static void setEpics(int taskID, Epic epic) {
         if (epics.containsKey(taskID)) {
             epics.put(taskID, epic);
@@ -85,14 +87,11 @@ public class TaskManager {
 
     public static Task getTasksForId(int taskID) {
         return tasks.get(taskID);
-    }     // get Task for ID done
+    }
     public static Subtask getSubTaskForId(int taskID) {
         return subtasks.get(taskID);
     }
     public static Epic getEpicForId(int taskID) {
         return epics.get(taskID);
     }
-
-
-
 }

@@ -10,18 +10,34 @@ public class Epic extends Task {
         int countDone = 0;
         int count = 0;
         for (Subtask subtask : subtasks.values()) {
-            count++;
-            switch (subtask.statusTask){
-                case NEW:
-                    break;
-                case IN_PROGRESS:
-                    epic.statusTask = StatusTask.IN_PROGRESS;
-                case DONE:
-                    countDone++;
+            if (epic.getTaskID() == subtask.epicID) {
+                count++;
+                switch (subtask.statusTask) {
+                    case NEW:
+                        break;
+                    case IN_PROGRESS:
+                        epic.statusTask = StatusTask.IN_PROGRESS;
+                        break;
+                    case DONE:
+                        countDone++;
+                         break;
+                }
+            }
+            if (count == 0) {
+                epic.statusTask = StatusTask.NEW;
+            } else if (count == countDone) {
+                epic.statusTask = StatusTask.DONE;
             }
         }
-        if (count == countDone) {
-            epic.statusTask = StatusTask.DONE;
-        }
+    }
+
+    @Override
+    public String toString() {
+        return "Epic{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", taskID=" + this.getTaskID() +
+                ", statusTask=" + statusTask +
+                '}';
     }
 }

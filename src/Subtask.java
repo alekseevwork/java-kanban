@@ -9,4 +9,15 @@ public class Subtask extends Task{
     protected static StatusTask getStatusSubtask(Subtask subtask) {
         return subtask.statusTask;
     }
+
+    @Override
+    public String toString() {
+        return "Subtask{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", taskID=" + this.getTaskID() +
+                ", statusTask=" + statusTask +
+                ", epicID=" + this.epicID +
+                '}';
+    }
 }
