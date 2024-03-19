@@ -1,3 +1,9 @@
+package taskmanager;
+
+import taskmanager.tasks.Epic;
+import taskmanager.tasks.Subtask;
+import taskmanager.tasks.Task;
+
 import java.util.HashMap;
 
 public class TaskManager {
@@ -17,7 +23,7 @@ public class TaskManager {
 
     static void printOfSubtasksInEpic(int epicID) {
         for (Subtask sub : subtasks.values()) {
-            if (epicID == sub.epicID) {
+            if (epicID == sub.getEpicID()) {
                 System.out.println(sub);
             }
         }
@@ -39,7 +45,7 @@ public class TaskManager {
         System.out.println("Задача удалена.");
     }
     static void deleteSubTasksForID(int taskID) {
-        int epicID = getSubTaskForId(taskID).epicID;
+        int epicID = getSubTaskForId(taskID).getEpicID();
         subtasks.remove(taskID);
         Epic.checkStatusSubtasks(subtasks, getEpicForId(epicID));
         System.out.println("Задача удалена.");
@@ -73,7 +79,7 @@ public class TaskManager {
             subtasks.put(subtaskID, task);
             System.out.println("Задача заведена.");
         }
-        Epic.checkStatusSubtasks(subtasks, getEpicForId(task.epicID));
+        Epic.checkStatusSubtasks(subtasks, getEpicForId(task.getEpicID()));
     }
     static void setEpics(int taskID, Epic epic) {
         if (epics.containsKey(taskID)) {

@@ -1,9 +1,10 @@
-import java.util.HashMap;
+package taskmanager.tasks;
+
 import java.util.Objects;
 
 public class Task {
-    String title;
-    String description;
+    private final String title;
+    private final String description;
     private final int taskID;
     protected StatusTask statusTask;
 
@@ -40,7 +41,7 @@ public class Task {
         return Objects.hash(title, description, taskID, statusTask);
     }
 
-    static void printTasks(Object tasks) {
+    public static void printTasks(Object tasks) {
         if (!tasks.toString().equals("{}")) {
             System.out.println(tasks);
         } else {
@@ -50,5 +51,13 @@ public class Task {
 
     public int getTaskID() {
         return taskID;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

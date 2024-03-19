@@ -1,3 +1,5 @@
+package taskmanager.tasks;
+
 import java.util.HashMap;
 
 public class Epic extends Task {
@@ -6,19 +8,19 @@ public class Epic extends Task {
         super(title, description, StatusTask.NEW);
     }
 
-    static void checkStatusSubtasks(HashMap<Integer, Subtask> subtasks, Epic epic) {
+    public static void checkStatusSubtasks(HashMap<Integer, Subtask> subtasks, Epic epic) {
         int countDone = 0;
         int count = 0;
         for (Subtask subtask : subtasks.values()) {
-            if (epic.getTaskID() == subtask.epicID) {
+            if (epic.getTaskID() == subtask.getEpicID()) {
                 count++;
                 switch (subtask.statusTask) {
-                    case NEW:
+                    case StatusTask.NEW:
                         break;
-                    case IN_PROGRESS:
+                    case StatusTask.IN_PROGRESS:
                         epic.statusTask = StatusTask.IN_PROGRESS;
                         break;
-                    case DONE:
+                    case StatusTask.DONE:
                         countDone++;
                          break;
                 }
@@ -34,8 +36,8 @@ public class Epic extends Task {
     @Override
     public String toString() {
         return "Epic{" +
-                "title='" + title + '\'' +
-                ", description='" + description + '\'' +
+                "title='" + this.getTitle() + '\'' +
+                ", description='" + this.getDescription() + '\'' +
                 ", taskID=" + this.getTaskID() +
                 ", statusTask=" + statusTask +
                 '}';

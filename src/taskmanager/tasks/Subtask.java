@@ -1,6 +1,8 @@
+package taskmanager.tasks;
+
 public class Subtask extends Task{
 
-    int epicID;
+    private final int epicID;
     public Subtask(String title, String description, StatusTask statusTask, int epicID) {
         super(title, description, statusTask);
         this.epicID = epicID;
@@ -13,11 +15,15 @@ public class Subtask extends Task{
     @Override
     public String toString() {
         return "Subtask{" +
-                "title='" + title + '\'' +
-                ", description='" + description + '\'' +
+                "title='" + this.getTitle() + '\'' +
+                ", description='" + this.getDescription() + '\'' +
                 ", taskID=" + this.getTaskID() +
                 ", statusTask=" + statusTask +
-                ", epicID=" + this.epicID +
+                ", epicID=" + this.getEpicID() +
                 '}';
+    }
+
+    public int getEpicID() {
+        return epicID;
     }
 }
