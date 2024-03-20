@@ -2,10 +2,10 @@ package taskmanager.tasks;
 
 public class Subtask extends Task{
 
-    private final int epicID;
-    public Subtask(String title, String description, StatusTask statusTask, int epicID) {
+    private final int epicId;
+    public Subtask(String title, String description, StatusTask statusTask, int epicId) {
         super(title, description, statusTask);
-        this.epicID = epicID;
+        this.epicId = epicId;
     }
 
     protected static StatusTask getStatusSubtask(Subtask subtask) {
@@ -17,13 +17,13 @@ public class Subtask extends Task{
         return "Subtask{" +
                 "title='" + this.getTitle() + '\'' +
                 ", description='" + this.getDescription() + '\'' +
-                ", taskID=" + this.getTaskID() +
+                ", taskID=" + this.getTaskId() +
                 ", statusTask=" + statusTask +
-                ", epicID=" + this.getEpicID() +
+                ", epicID=" + this.getEpicId() +
                 '}';
     }
 
-    public int getEpicID() {
-        return epicID;
+    public int getEpicId() {
+        return epicId;
     }
 }

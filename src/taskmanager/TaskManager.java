@@ -21,9 +21,9 @@ public class TaskManager {
         }
     }
 
-    static void printOfSubtasksInEpic(int epicID) {
+    static void printOfSubtasksInEpic(int epicId) {
         for (Subtask sub : subtasks.values()) {
-            if (epicID == sub.getEpicID()) {
+            if (epicId == sub.getEpicId()) {
                 System.out.println(sub);
             }
         }
@@ -40,20 +40,20 @@ public class TaskManager {
         System.out.println("Задачи удалены.");
     }
 
-    static void deleteTasksForID(int taskID) {
-        tasks.remove(taskID);
+    static void deleteTasksForID(int taskId) {
+        tasks.remove(taskId);
         System.out.println("Задача удалена.");
     }
-    static void deleteSubTasksForID(int taskID) {
-        int epicID = getSubTaskForId(taskID).getEpicID();
-        subtasks.remove(taskID);
-        Epic.checkStatusSubtasks(subtasks, getEpicForId(epicID));
+    static void deleteSubTasksForID(int taskId) {
+        int epicId = getSubTaskForId(taskId).getEpicId();
+        subtasks.remove(taskId);
+        getEpicForId(epicId).checkStatusSubtasks(subtasks);
         System.out.println("Задача удалена.");
     }
-    static void deleteEpicForID(int taskID) {
-        int epicID = epics.get(taskID).getTaskID();
-        if (!epics.isEmpty() && !epics.containsKey(taskID)) {
-            epics.remove(taskID);
+    static void deleteEpicForID(int taskId) {
+        int epicID = epics.get(taskId).getTaskId();
+        if (!epics.isEmpty() && !epics.containsKey(taskId)) {
+            epics.remove(taskId);
             System.out.println("Задача удалена.");
             while (subtasks.containsKey(epicID)) {
                 deleteSubTasksForID(epicID);
@@ -62,42 +62,42 @@ public class TaskManager {
         System.out.println("Связанные подзадачи удалены.");
     }
 
-    static void setTasks(int taskID, Task task) {
-        if (tasks.containsKey(taskID)) {
-            tasks.put(taskID, task);
+    static void setTasks(int taskId, Task task) {
+        if (tasks.containsKey(taskId)) {
+            tasks.put(taskId, task);
             System.out.println("Задача изменена.");
         } else {
-            tasks.put(taskID, task);
+            tasks.put(taskId, task);
             System.out.println("Задача заведена.");
         }
     }
-    static void setSubtasks(int subtaskID, Subtask task) {
-        if (subtasks.containsKey(subtaskID)) {
-            subtasks.put(subtaskID, task);
+    static void setSubtasks(int subtaskId, Subtask task) {
+        if (subtasks.containsKey(subtaskId)) {
+            subtasks.put(subtaskId, task);
             System.out.println("Задача изменена.");
         } else {
-            subtasks.put(subtaskID, task);
+            subtasks.put(subtaskId, task);
             System.out.println("Задача заведена.");
         }
-        Epic.checkStatusSubtasks(subtasks, getEpicForId(task.getEpicID()));
+        getEpicForId(task.getEpicId()).checkStatusSubtasks(subtasks);
     }
-    static void setEpics(int taskID, Epic epic) {
-        if (epics.containsKey(taskID)) {
-            epics.put(taskID, epic);
+    static void setEpics(int taskId, Epic epic) {
+        if (epics.containsKey(taskId)) {
+            epics.put(taskId, epic);
             System.out.println("Задача изменена.");
         } else {
-            epics.put(taskID, epic);
+            epics.put(taskId, epic);
             System.out.println("Задача заведена.");
         }
     }
 
-    public static Task getTasksForId(int taskID) {
-        return tasks.get(taskID);
+    public static Task getTasksForId(int taskId) {
+        return tasks.get(taskId);
     }
-    public static Subtask getSubTaskForId(int taskID) {
-        return subtasks.get(taskID);
+    public static Subtask getSubTaskForId(int taskId) {
+        return subtasks.get(taskId);
     }
-    public static Epic getEpicForId(int taskID) {
-        return epics.get(taskID);
+    public static Epic getEpicForId(int taskId) {
+        return epics.get(taskId);
     }
 }
