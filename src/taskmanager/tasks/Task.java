@@ -41,14 +41,6 @@ public class Task {
         return Objects.hash(title, description, taskId, statusTask);
     }
 
-    public static void printTasks(Object tasks) {
-        if (!tasks.toString().equals("{}")) {
-            System.out.println(tasks);
-        } else {
-            System.out.println("Список задач пуст.");
-        }
-    }
-
     public int getTaskId() {
         return taskId;
     }

@@ -1,15 +1,13 @@
-package taskmanager;
+package taskmanager.managers;
 
 import taskmanager.tasks.Epic;
 import taskmanager.tasks.Subtask;
 import taskmanager.tasks.Task;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public interface TaskManager {
 
-
-    void printOfTypeTasks(Object object);
     void printOfSubtasksInEpic(int epicId);
 
     void deleteTypeTasks(Object object);
@@ -26,7 +24,7 @@ public interface TaskManager {
     Subtask getSubTaskForId(int taskId);
     Epic getEpicForId(int taskId);
 
-    HashMap<Integer, Task> getTasks();
-    HashMap<Integer, Epic> getEpics();
-    HashMap<Integer, Subtask> getSubtasks();
+    Map<Integer, Task> getTasks();
+    Map<Integer, Epic> getEpics();
+    Map<Integer, Subtask> getSubtasks();
 }

@@ -1,4 +1,4 @@
-package taskmanager;
+package taskmanager.managers;
 
 import taskmanager.tasks.Task;
 

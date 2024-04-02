@@ -1,4 +1,4 @@
-package taskmanager;
+package taskmanager.managers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -7,14 +7,14 @@ import taskmanager.tasks.StatusTask;
 import taskmanager.tasks.Subtask;
 import taskmanager.tasks.Task;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryTaskManagerTest {
-    static HashMap<Integer, Task> tasks;
-    static HashMap<Integer, Epic> epics;
-    static HashMap<Integer, Subtask> subtasks;
+    static Map<Integer, Task> tasks;
+    static Map<Integer, Epic> epics;
+    static Map<Integer, Subtask> subtasks;
     static TaskManager manager;
 
     static Task task;

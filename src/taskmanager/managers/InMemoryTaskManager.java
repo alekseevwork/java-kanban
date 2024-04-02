@@ -1,27 +1,17 @@
-package taskmanager;
+package taskmanager.managers;
 
 import taskmanager.tasks.Epic;
 import taskmanager.tasks.Subtask;
 import taskmanager.tasks.Task;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager{
-    static HashMap<Integer, Task> tasks = new HashMap<>();
-    static HashMap<Integer, Epic> epics = new HashMap<>();
-    static HashMap<Integer, Subtask> subtasks = new HashMap<>();
-    static HistoryManager historyManager = Managers.getDefaultHistory();
-
-    @Override
-    public void printOfTypeTasks(Object object) {
-        if (object == tasks) {
-            Task.printTasks(tasks);
-        } else if (object == subtasks) {
-            Subtask.printTasks(subtasks);
-        } else if (object == epics) {
-            Epic.printTasks(epics);
-        }
-    }
+    static Map<Integer, Task> tasks = new HashMap<>();
+    static Map<Integer, Epic> epics = new HashMap<>();
+    static Map<Integer, Subtask> subtasks = new HashMap<>();
+    public static HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Override
     public void printOfSubtasksInEpic(int epicId) {
@@ -117,15 +107,15 @@ public class InMemoryTaskManager implements TaskManager{
     }
 
     @Override
-    public HashMap<Integer, Task> getTasks() {
+    public Map<Integer, Task> getTasks() {
         return tasks;
     }
     @Override
-    public HashMap<Integer, Epic> getEpics(){
+    public Map<Integer, Epic> getEpics(){
         return epics;
     }
     @Override
-    public HashMap<Integer, Subtask> getSubtasks(){
+    public Map<Integer, Subtask> getSubtasks(){
         return subtasks;
     }
 }

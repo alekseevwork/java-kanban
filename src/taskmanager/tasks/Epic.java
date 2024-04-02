@@ -1,6 +1,6 @@
 package taskmanager.tasks;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class Epic extends Task {
 
@@ -18,7 +18,7 @@ public class Epic extends Task {
                 '}';
     }
 
-    public void checkStatusSubtasks(HashMap<Integer, Subtask> subtasks) {
+    public void checkStatusSubtasks(Map<Integer, Subtask> subtasks) {
         int countDone = 0;
         int countIteration = 0;
         for (Subtask subtask : subtasks.values()) {

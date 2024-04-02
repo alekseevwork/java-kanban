@@ -1,11 +1,13 @@
 package taskmanager;
 
+import taskmanager.managers.Managers;
+import taskmanager.managers.TaskManager;
 import taskmanager.tasks.Epic;
 import taskmanager.tasks.StatusTask;
 import taskmanager.tasks.Subtask;
 import taskmanager.tasks.Task;
 
-import static taskmanager.InMemoryTaskManager.historyManager;
+import static taskmanager.managers.InMemoryTaskManager.historyManager;
 
 public class Main {
 
@@ -29,9 +31,9 @@ public class Main {
         manager.setEpics(epic2.getTaskId(), epic2);
         manager.setSubtasks(sub3.getTaskId(), sub3);
 
-        System.out.println(InMemoryTaskManager.tasks);
-        System.out.println(InMemoryTaskManager.epics);
-        System.out.println(InMemoryTaskManager.subtasks);
+        System.out.println(manager.getTasks());
+        System.out.println(manager.getEpics());
+        System.out.println(manager.getSubtasks());
 
         Task updateTask1 = new Task("Title1", "Desc1", StatusTask.IN_PROGRESS);
         Task updateTask2 = new Task("Title2", "Desc1", StatusTask.DONE);
@@ -62,9 +64,9 @@ public class Main {
         manager.deleteSubTasksForID(sub2.getTaskId());
         manager.deleteSubTasksForID(sub1.getTaskId());
 
-        manager.printOfTypeTasks(InMemoryTaskManager.tasks);
-        manager.printOfTypeTasks(InMemoryTaskManager.epics);
-        manager.printOfTypeTasks(InMemoryTaskManager.subtasks);
+        System.out.println(manager.getTasks());
+        System.out.println(manager.getEpics());
+        System.out.println(manager.getSubtasks());
 
         System.out.println(historyManager.getHistory());
     }
