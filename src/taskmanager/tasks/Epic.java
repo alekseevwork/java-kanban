@@ -14,7 +14,7 @@ public class Epic extends Task {
                 "title='" + this.getTitle() + '\'' +
                 ", description='" + this.getDescription() + '\'' +
                 ", taskID=" + this.getTaskId() +
-                ", statusTask=" + statusTask +
+                ", statusTask=" + this.getStatusTask() +
                 '}';
     }
 
@@ -24,11 +24,11 @@ public class Epic extends Task {
         for (Subtask subtask : subtasks.values()) {
             if (getTaskId() == subtask.getEpicId()) {
                 countIteration++;
-                switch (subtask.statusTask) {
+                switch (subtask.getStatusTask()) {
                     case StatusTask.NEW:
                         break;
                     case StatusTask.IN_PROGRESS:
-                        this.statusTask = StatusTask.IN_PROGRESS;
+                        this.setStatusTask(StatusTask.IN_PROGRESS);
                         break;
                     case StatusTask.DONE:
                         countDone++;
@@ -36,10 +36,15 @@ public class Epic extends Task {
                 }
             }
             if (countIteration == 0) {
-                this.statusTask = StatusTask.NEW;
+                this.setStatusTask(StatusTask.NEW);
             } else if (countIteration == countDone) {
-                this.statusTask = StatusTask.DONE;
+                this.setStatusTask(StatusTask.DONE);
             }
         }
+    }
+    public static Epic copyEpic(Epic task) {
+        Epic copy = new Epic(task.getTitle(), task.getDescription());
+        copy.setStatusTask(task.getStatusTask());
+        return copy;
     }
 }

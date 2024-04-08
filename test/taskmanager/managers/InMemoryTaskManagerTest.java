@@ -12,9 +12,10 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryTaskManagerTest {
-    static Map<Integer, Task> tasks;
-    static Map<Integer, Epic> epics;
-    static Map<Integer, Subtask> subtasks;
+    private static Map<Integer, Task> tasks;
+    private static Map<Integer, Epic> epics;
+    private static Map<Integer, Subtask> subtasks;
+
     static TaskManager manager;
 
     static Task task;
@@ -34,11 +35,12 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void AddingTaskInTasksListAndGettingTaskById() {
+    void addingTaskInTasksListAndGettingTaskById() {
         manager.setTasks(task.getTaskId(), task);
         assertEquals(1, tasks.size(), "Неверное количество задач.");
 
         final Task savedTask = tasks.get(task.getTaskId());
+
 
         assertNotNull(savedTask, "Задача не найдена.");
         assertEquals(task, savedTask, "Задачи не совпадают.");
@@ -46,7 +48,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void AddingEpicInEpicsListAndGettingEpicById() {
+    void addingEpicInEpicsListAndGettingEpicById() {
         manager.setEpics(epic.getTaskId(), epic);
 
         assertEquals(1, epics.size(), "Неверное количество задач.");
@@ -58,7 +60,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void AddingSubtaskInSubtasksListAndGettingSubtaskById() {
+    void addingSubtaskInSubtasksListAndGettingSubtaskById() {
         manager.setSubtasks(subtask.getTaskId(), subtask);
 
         assertEquals(1, subtasks.size(), "Неверное количество задач.");
@@ -70,32 +72,34 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void ChangingEpicStatusWhenAddingSubtaskNEW() {
+    void changingEpicStatusWhenAddingSubtaskNEW() {
         int indexOfNewStatus = epic.toString().indexOf("NEW");
         assertTrue(indexOfNewStatus > 0, "Неверный статус.");
     }
 
     @Test
-    void ChangingEpicStatusWhenAddingSubtaskInProgress() {
+    void changingEpicStatusWhenAddingSubtaskInProgress() {
         manager.setEpics(epic.getTaskId(), epic);
         subtask = new Subtask("Title", "Desc", StatusTask.IN_PROGRESS, epic.getTaskId());
         manager.setSubtasks(subtask.getTaskId(), subtask);
         int indexOfInProgressStatus = epic.toString().indexOf("IN_PROGRESS");
+
         assertTrue(indexOfInProgressStatus > 0, "Неверный статус.");
 
     }
 
     @Test
-    void ChangingEpicStatusWhenAddingSubtaskDone() {
+    void changingEpicStatusWhenAddingSubtaskDone() {
         manager.setEpics(epic.getTaskId(), epic);
         subtask = new Subtask("Title", "Desc", StatusTask.DONE, epic.getTaskId());
         manager.setSubtasks(subtask.getTaskId(), subtask);
         int indexOfDoneStatus = epic.toString().indexOf("DONE");
+        System.out.println(epic);
         assertTrue(indexOfDoneStatus > 0, "Неверный статус.");
     }
 
     @Test
-    void DeleteTaskByIdInTasksList() {
+    void deleteTaskByIdInTasksList() {
         manager.setTasks(task.getTaskId(), task);
         manager.deleteTasksForID(task.getTaskId());
 
@@ -103,7 +107,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void DeleteEpicByIdInEpicsList() {
+    void deleteEpicByIdInEpicsList() {
         manager.setEpics(epic.getTaskId(), epic);
         manager.setSubtasks(subtask.getTaskId(), subtask);
 
@@ -111,6 +115,60 @@ class InMemoryTaskManagerTest {
 
         manager.deleteEpicForID(epic.getTaskId());
         assertEquals("{}", epics.toString(), "Задача не удалена.");
+    }
 
+    @Test
+    void setTaskFieldsNotChangeAfterAddTaskToManager() {
+        manager.setTasks(task.getTaskId(), task);
+        Task savedTask = manager.getTasksForId(task.getTaskId());
+
+        savedTask.setTaskId(1);
+        savedTask.setTitle("New Title");
+        savedTask.setDescription("New Description");
+        savedTask.setStatusTask(StatusTask.DONE);
+
+        Task savedTaskAgain = manager.getTasksForId(task.getTaskId());
+
+        assertNotEquals(1, savedTaskAgain.getTaskId(), "Изменился Id.");
+        assertNotEquals("New Title", savedTaskAgain.getTitle(), "Изменился заголовок.");
+        assertNotEquals("New Description", savedTaskAgain.getDescription(), "Изменилось описание.");
+        assertNotEquals(StatusTask.DONE, savedTaskAgain.getStatusTask(), "Изменился статус.");
+
+        assertEquals(savedTaskAgain, tasks.get(task.getTaskId()), "Задачи не совпадают.");
+    }
+
+    @Test
+    void setSubtasksFieldsNotChangeAfterAddSubtasksToManager() {
+        manager.setEpics(epic.getTaskId(), epic);
+        manager.setSubtasks(subtask.getTaskId(), subtask);
+        Subtask savedTask = manager.getSubTaskForId(subtask.getTaskId());
+
+        savedTask.setTaskId(1);
+        savedTask.setTitle("New Title");
+        savedTask.setDescription("New Description");
+        savedTask.setStatusTask(StatusTask.DONE);
+
+        Subtask savedTaskAgain = manager.getSubTaskForId(subtask.getTaskId());
+
+        assertNotEquals(1, savedTaskAgain.getTaskId(), "Изменился Id.");
+        assertNotEquals("New Title", savedTaskAgain.getTitle(), "Изменился заголовок.");
+        assertNotEquals("New Description", savedTaskAgain.getDescription(), "Изменилось описание.");
+        assertNotEquals(StatusTask.DONE, savedTaskAgain.getStatusTask(), "Изменился статус.");
+
+        assertEquals(savedTaskAgain, subtasks.get(subtask.getTaskId()), "Задачи не совпадают.");
+    }
+
+    @Test
+    void setTaskFieldsChange() {
+        manager.deleteTasksForID(task.getTaskId());
+        task.setTaskId(1);
+        task.setTitle("New Title");
+        task.setDescription("New Description");
+        task.setStatusTask(StatusTask.DONE);
+
+        assertEquals(1, task.getTaskId(), "Не изменился Id.");
+        assertEquals("New Title", task.getTitle(), "Не изменился заголовок.");
+        assertEquals("New Description", task.getDescription(), "Не зменилось описание.");
+        assertEquals(StatusTask.DONE, task.getStatusTask(), "Не изменился статус.");
     }
 }

@@ -1,12 +1,22 @@
 package taskmanager.managers;
 
-public class Managers {
+public final class Managers {
+
+    public static InMemoryTaskManager taskManager;
+    public static InMemoryHistoryManager historyManager;
 
     public static TaskManager getDefault() {
-        return new InMemoryTaskManager();
+        if (taskManager == null) {
+            taskManager = new InMemoryTaskManager();
+        }
+        return taskManager;
     }
 
     public static HistoryManager getDefaultHistory() {
-        return new InMemoryHistoryManager();
+        if (historyManager == null) {
+            historyManager = new InMemoryHistoryManager();
+        }
+
+        return historyManager;
     }
 }

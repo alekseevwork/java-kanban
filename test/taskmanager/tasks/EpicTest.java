@@ -7,10 +7,10 @@ import static org.junit.jupiter.api.Assertions.*;
 class EpicTest {
 
     @Test
-    void StatusOfEpicFirstCreatedShouldBeNew() {
+    void statusOfEpicFirstCreatedShouldBeNew() {
         Epic epic = new Epic("Title", "Disc");
 
         assertNotNull(epic, "Задача не найдена.");
-        assertEquals(StatusTask.NEW, epic.statusTask,"Неверный статус.");
+        assertEquals(StatusTask.NEW, epic.getStatusTask(),"Неверный статус.");
     }
 }

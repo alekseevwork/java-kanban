@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager{
+
     static Map<Integer, Task> tasks = new HashMap<>();
     static Map<Integer, Epic> epics = new HashMap<>();
     static Map<Integer, Subtask> subtasks = new HashMap<>();
@@ -77,7 +78,7 @@ public class InMemoryTaskManager implements TaskManager{
             subtasks.put(subtaskId, task);
             System.out.println("Задача заведена.");
         }
-        getEpicForId(task.getEpicId()).checkStatusSubtasks(subtasks);
+        epics.get(task.getEpicId()).checkStatusSubtasks(subtasks);
     }
     @Override
     public void setEpics(int taskId, Epic epic) {
@@ -92,18 +93,21 @@ public class InMemoryTaskManager implements TaskManager{
 
     @Override
     public Task getTasksForId(int taskId) {
+        Task copy = Task.copyTask(tasks.get(taskId));
         historyManager.add(tasks.get(taskId));
-        return tasks.get(taskId);
+        return copy;
     }
     @Override
     public Subtask getSubTaskForId(int taskId) {
+        Subtask copy = Subtask.copySubTask(subtasks.get(taskId));
         historyManager.add(subtasks.get(taskId));
-        return subtasks.get(taskId);
+        return copy;
     }
     @Override
     public Epic getEpicForId(int taskId) {
+        Epic copy = Epic.copyEpic(epics.get(taskId));
         historyManager.add(epics.get(taskId));
-        return epics.get(taskId);
+        return copy;
     }
 
     @Override
