@@ -21,8 +21,8 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
 
-    static private Node<Task> head;
-    static private Node<Task> tail;
+    private static Node<Task> head;
+    private static Node<Task> tail;
     private int size = 0;
 
     private final Map<Integer, Node<Task>> hashHistory = new HashMap<>();
