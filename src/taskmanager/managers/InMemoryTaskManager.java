@@ -7,7 +7,7 @@ import taskmanager.tasks.Task;
 import java.util.HashMap;
 import java.util.Map;
 
-public class InMemoryTaskManager implements TaskManager{
+public class InMemoryTaskManager implements TaskManager {
 
     static Map<Integer, Task> tasks = new HashMap<>();
     static Map<Integer, Epic> epics = new HashMap<>();
@@ -38,19 +38,24 @@ public class InMemoryTaskManager implements TaskManager{
     @Override
     public void deleteTasksForID(int taskId) {
         tasks.remove(taskId);
+        historyManager.remove(taskId);
         System.out.println("Задача удалена.");
     }
+
     @Override
     public void deleteSubTasksForID(int taskId) {
         int epicId = getSubTaskForId(taskId).getEpicId();
         subtasks.remove(taskId);
+        historyManager.remove(taskId);
         getEpicForId(epicId).checkStatusSubtasks(subtasks);
         System.out.println("Задача удалена.");
     }
+
     @Override
     public void deleteEpicForID(int taskId) {
         if (!epics.isEmpty() && epics.containsKey(taskId)) {
             epics.remove(taskId);
+            historyManager.remove(taskId);
             System.out.println("Задача удалена.");
             while (subtasks.containsKey(taskId)) {
                 deleteSubTasksForID(taskId);
@@ -69,6 +74,7 @@ public class InMemoryTaskManager implements TaskManager{
             System.out.println("Задача заведена.");
         }
     }
+
     @Override
     public void setSubtasks(int subtaskId, Subtask task) {
         if (subtasks.containsKey(subtaskId)) {
@@ -80,6 +86,7 @@ public class InMemoryTaskManager implements TaskManager{
         }
         epics.get(task.getEpicId()).checkStatusSubtasks(subtasks);
     }
+
     @Override
     public void setEpics(int taskId, Epic epic) {
         if (epics.containsKey(taskId)) {
@@ -97,16 +104,23 @@ public class InMemoryTaskManager implements TaskManager{
         historyManager.add(tasks.get(taskId));
         return copy;
     }
+
     @Override
     public Subtask getSubTaskForId(int taskId) {
         Subtask copy = Subtask.copySubTask(subtasks.get(taskId));
         historyManager.add(subtasks.get(taskId));
         return copy;
     }
+
     @Override
     public Epic getEpicForId(int taskId) {
         Epic copy = Epic.copyEpic(epics.get(taskId));
         historyManager.add(epics.get(taskId));
+        for (Subtask subtask : subtasks.values()) {
+            if (subtask.getEpicId() == taskId) {
+                historyManager.add(subtask);
+            }
+        }
         return copy;
     }
 
@@ -114,12 +128,14 @@ public class InMemoryTaskManager implements TaskManager{
     public Map<Integer, Task> getTasks() {
         return tasks;
     }
+
     @Override
-    public Map<Integer, Epic> getEpics(){
+    public Map<Integer, Epic> getEpics() {
         return epics;
     }
+
     @Override
-    public Map<Integer, Subtask> getSubtasks(){
+    public Map<Integer, Subtask> getSubtasks() {
         return subtasks;
     }
 }
