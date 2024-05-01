@@ -77,10 +77,11 @@ public class InMemoryHistoryManager implements HistoryManager {
         Node<Task> newNode = new Node<>(oldTail, task, null);
 
         tail = newNode;
-        if (oldTail == null)
+        if (oldTail == null) {
             head = newNode;
-        else
+        } else {
             oldTail.next = newNode;
+        }
         size++;
     }
 

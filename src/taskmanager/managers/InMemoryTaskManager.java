@@ -37,26 +37,26 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteTasksForID(int taskId) {
+        System.out.println("Удалена задача: " + tasks.get(taskId));
         tasks.remove(taskId);
         historyManager.remove(taskId);
-        System.out.println("Задача удалена.");
     }
 
     @Override
     public void deleteSubTasksForID(int taskId) {
         int epicId = getSubTaskForId(taskId).getEpicId();
+        System.out.println("Удалена задача: " + subtasks.get(taskId));
         subtasks.remove(taskId);
         historyManager.remove(taskId);
         getEpicForId(epicId).checkStatusSubtasks(subtasks);
-        System.out.println("Задача удалена.");
     }
 
     @Override
     public void deleteEpicForID(int taskId) {
         if (!epics.isEmpty() && epics.containsKey(taskId)) {
+            System.out.println("Удалена задача: " + epics.get(taskId));
             epics.remove(taskId);
             historyManager.remove(taskId);
-            System.out.println("Задача удалена.");
             while (subtasks.containsKey(taskId)) {
                 deleteSubTasksForID(taskId);
             }
