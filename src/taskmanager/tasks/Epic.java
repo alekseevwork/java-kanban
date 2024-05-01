@@ -42,6 +42,7 @@ public class Epic extends Task {
             }
         }
     }
+
     public static Epic copyEpic(Epic task) {
         Epic copy = new Epic(task.getTitle(), task.getDescription());
         copy.setStatusTask(task.getStatusTask());
