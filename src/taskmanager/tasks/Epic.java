@@ -18,6 +18,16 @@ public class Epic extends Task {
                 '}';
     }
 
+    @Override
+    public String toStringToFile() {
+        return String.format("EPIC,%d,%s,%s,%s\n",
+                this.getTaskId(),
+                this.getTitle(),
+                this.getDescription(),
+                this.getStatusTask()
+        );
+    }
+
     public void checkStatusSubtasks(Map<Integer, Subtask> subtasks) {
         int countDone = 0;
         int countIteration = 0;

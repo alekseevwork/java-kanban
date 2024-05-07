@@ -24,6 +24,17 @@ public class Subtask extends Task {
                 '}';
     }
 
+    @Override
+    public String toStringToFile() {
+        return String.format("SUBTASK,%d,%s,%s,%s,%d\n",
+                this.getTaskId(),
+                this.getTitle(),
+                this.getDescription(),
+                this.getStatusTask(),
+                this.epicId
+        );
+    }
+
     public void setEpicId(int epicId) {
         this.epicId = epicId;
     }

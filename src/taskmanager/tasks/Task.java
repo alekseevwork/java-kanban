@@ -25,6 +25,10 @@ public class Task {
                 '}';
     }
 
+    public String toStringToFile() {
+        return String.format("TASK,%d,%s,%s,%s\n", taskId, title, description, statusTask);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -38,7 +42,7 @@ public class Task {
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, description, taskId, statusTask);
+        return Objects.hash(title, description, taskId, statusTask, toStringToFile());
     }
 
     public void setTitle(String title) {
