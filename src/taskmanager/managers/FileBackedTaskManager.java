@@ -1,12 +1,16 @@
 package taskmanager.managers;
 
-import taskmanager.exception.ManagerSaveException;
+import taskmanager.exceptions.ManagerSaveException;
 import taskmanager.tasks.Epic;
 import taskmanager.tasks.StatusTask;
 import taskmanager.tasks.Subtask;
 import taskmanager.tasks.Task;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,11 +39,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                 String line = br.readLine();
                 saveTaskFromString(line);
             }
+            save();
         } catch (IOException e) {
             System.out.println(e.getMessage());
             throw new ManagerSaveException(e.getMessage(), (IOException) e.getCause());
-        } finally {
-            save();
         }
     }
 

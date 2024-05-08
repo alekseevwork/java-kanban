@@ -12,23 +12,13 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static taskmanager.managers.FileBackedTaskManager.*;
 
 class FileBackedTaskManagerTest {
 
-    private static Map<Integer, Task> tasks;
-    private static Map<Integer, Epic> epics;
-    private static Map<Integer, Subtask> subtasks;
-
     static TaskManager manager;
-
-    static Task task;
-    static Epic epic;
-    static Subtask subtask;
-
     static File taskFile;
 
     @BeforeAll
@@ -37,15 +27,12 @@ class FileBackedTaskManagerTest {
         tasks = manager.getTasks();
         epics = manager.getEpics();
         subtasks = manager.getSubtasks();
+
         taskFile = File.createTempFile("tasksFile.csv", null);
     }
 
     @BeforeEach
     void beforeEach() throws IOException {
-        task = new Task("Title", "Desc", StatusTask.NEW);
-        epic = new Epic("Title", "Disc");
-        subtask = new Subtask("Title", "Desc", StatusTask.NEW, epic.getTaskId());
-
         manager = Managers.getBackedManager();
         tasks.clear();
         epics.clear();
@@ -55,6 +42,8 @@ class FileBackedTaskManagerTest {
 
     @Test
     void testLoadFromEmptyFile() throws IOException {
+        Task task = new Task("Title", "Desc", StatusTask.NEW);
+
         loadFromFile(taskFile.toPath());
         assertEquals(tasks, new HashMap<>(), "Список задач не пустой.");
 
@@ -68,6 +57,7 @@ class FileBackedTaskManagerTest {
 
     @Test
     void testLoadFromNotEmptyFile() throws IOException {
+        Task task = new Task("Title", "Desc", StatusTask.NEW);
         manager.setTasks(task.getTaskId(), task);
         loadFromFile(taskFile.toPath());
         assertNotEquals(tasks, new HashMap<>(), "Файл не пустой.");
@@ -84,6 +74,11 @@ class FileBackedTaskManagerTest {
         String stringEpic = "EPIC,-1381782107,Title,Disc,NEW";
         String stringSubtask = "SUBTASK,610058305,Title,Desc,NEW,-1381782107";
 
+        Task task = new Task("Title", "Desc", StatusTask.NEW);
+        Epic epic = new Epic("Title", "Disc");
+        Subtask subtask = new Subtask("Title", "Desc", StatusTask.NEW, epic.getTaskId());
+
+
         saveTaskFromString(stringTask);
         saveTaskFromString(stringEpic);
         saveTaskFromString(stringSubtask);
@@ -95,6 +90,8 @@ class FileBackedTaskManagerTest {
 
     @Test
     void addingTaskInTasksListAndGettingTaskById() {
+        Task task = new Task("Title", "Desc", StatusTask.NEW);
+
         manager.setTasks(task.getTaskId(), task);
         assertEquals(1, tasks.size(), "Неверное количество задач.");
 

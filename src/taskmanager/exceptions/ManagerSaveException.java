@@ -1,4 +1,4 @@
-package taskmanager.exception;
+package taskmanager.exceptions;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
