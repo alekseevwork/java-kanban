@@ -11,42 +11,34 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Map;
 
-public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
+public class FileBackedTaskManager extends InMemoryTaskManager {
 
-    private static Path taskFile = Paths.get("tasksFile.csv");
+    private final Path taskFile;
 
-    public FileBackedTaskManager() throws IOException {
-        if (!taskFile.toFile().exists()) {
-            taskFile = Files.createFile(Paths.get(taskFile.toUri()));
-        }
-        try {
-            loadFromFile(taskFile);
-        } catch (IOException e) {
-            throw new ManagerSaveException(e.getMessage(), (IOException) e.getCause());
-        }
+    public FileBackedTaskManager(Path file) {
+        this.taskFile = file;
     }
 
-    public static void loadFromFile(Path file) throws IOException {
+    public static FileBackedTaskManager loadFromFile(Path file) {
+        FileBackedTaskManager manager = new FileBackedTaskManager(file);
+
         try (BufferedReader br = new BufferedReader(new FileReader(file.toFile(), StandardCharsets.UTF_8))) {
             br.readLine();
             while (br.ready()) {
                 String line = br.readLine();
                 saveTaskFromString(line);
             }
-            save();
         } catch (IOException e) {
-            System.out.println(e.getMessage());
             throw new ManagerSaveException(e.getMessage(), (IOException) e.getCause());
         }
+        return manager;
     }
 
-    static void save() throws ManagerSaveException {
+    void save() {
         try (Writer fileWriter = new FileWriter(String.valueOf(taskFile))) {
             fileWriter.write("type,id,title,description,statusTask,epic\n");
             for (Task task : tasks.values()) {
@@ -122,45 +114,5 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     public void setEpics(int taskId, Epic epic) {
         super.setEpics(taskId, epic);
         save();
-    }
-
-    @Override
-    public Task getTasksForId(int taskId) {
-        return super.getTasksForId(taskId);
-    }
-
-    @Override
-    public Subtask getSubTaskForId(int taskId) {
-        return super.getSubTaskForId(taskId);
-    }
-
-    @Override
-    public Epic getEpicForId(int taskId) {
-        return super.getEpicForId(taskId);
-    }
-
-    @Override
-    public Map<Integer, Task> getTasks() {
-        return super.getTasks();
-    }
-
-    @Override
-    public Map<Integer, Epic> getEpics() {
-        return super.getEpics();
-    }
-
-    @Override
-    public Map<Integer, Subtask> getSubtasks() {
-        return super.getSubtasks();
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return super.toString();
     }
 }

@@ -1,9 +1,8 @@
 package taskmanager.exceptions;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
 
-public class ManagerSaveException extends UncheckedIOException {
+public class ManagerSaveException extends RuntimeException {
 
     public ManagerSaveException(String message, IOException cause) {
         super(message, cause);

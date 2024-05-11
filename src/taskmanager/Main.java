@@ -7,12 +7,13 @@ import taskmanager.tasks.StatusTask;
 import taskmanager.tasks.Subtask;
 import taskmanager.tasks.Task;
 
-import static taskmanager.managers.InMemoryTaskManager.historyManager;
+import java.nio.file.Path;
 
 public class Main {
 
     public static void main(String[] args) {
-        TaskManager manager = Managers.getBackedManager();
+        Path file = Path.of("resources\\tasksFile.csv");
+        TaskManager manager = Managers.getBackedManager(file);
 
         Task task = new Task("Title", "Desc", StatusTask.NEW);
         Epic epic1 = new Epic("TitleE1", "EpicDic");
@@ -28,14 +29,5 @@ public class Main {
 
         Epic epic2 = new Epic("TitleE", "EpicDic");
         manager.setEpics(epic2.getTaskId(), epic2);
-
-        manager.getEpicForId(epic1.getTaskId());
-        System.out.println(historyManager.getHistory());
-
-        manager.getEpicForId(epic2.getTaskId());
-        System.out.println(historyManager.getHistory());
-
-        manager.getEpicForId(epic1.getTaskId());
-        System.out.println(historyManager.getHistory());
     }
 }

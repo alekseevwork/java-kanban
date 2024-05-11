@@ -1,8 +1,6 @@
 package taskmanager.managers;
 
-import taskmanager.exceptions.ManagerSaveException;
-
-import java.io.IOException;
+import java.nio.file.Path;
 
 public final class Managers {
 
@@ -24,13 +22,9 @@ public final class Managers {
         return historyManager;
     }
 
-    public static TaskManager getBackedManager() {
+    public static TaskManager getBackedManager(Path file) {
         if (fileBackedManager == null) {
-            try {
-                fileBackedManager = new FileBackedTaskManager();
-            } catch (IOException e) {
-                throw new ManagerSaveException(e.getMessage(), (IOException) e.getCause());
-            }
+            fileBackedManager = FileBackedTaskManager.loadFromFile(file);
         }
         return fileBackedManager;
     }

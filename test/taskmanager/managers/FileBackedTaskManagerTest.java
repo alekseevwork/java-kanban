@@ -23,17 +23,15 @@ class FileBackedTaskManagerTest {
 
     @BeforeAll
     static void beforeAll() throws IOException {
-        manager = Managers.getBackedManager();
+        taskFile = File.createTempFile("resources\\tasksFile.csv", null);
+        manager = Managers.getBackedManager(taskFile.toPath());
         tasks = manager.getTasks();
         epics = manager.getEpics();
         subtasks = manager.getSubtasks();
-
-        taskFile = File.createTempFile("tasksFile.csv", null);
     }
 
     @BeforeEach
     void beforeEach() throws IOException {
-        manager = Managers.getBackedManager();
         tasks.clear();
         epics.clear();
         subtasks.clear();
@@ -41,7 +39,7 @@ class FileBackedTaskManagerTest {
     }
 
     @Test
-    void testLoadFromEmptyFile() throws IOException {
+    void testLoadFromEmptyFile() {
         Task task = new Task("Title", "Desc", StatusTask.NEW);
 
         loadFromFile(taskFile.toPath());
@@ -56,7 +54,7 @@ class FileBackedTaskManagerTest {
     }
 
     @Test
-    void testLoadFromNotEmptyFile() throws IOException {
+    void testLoadFromNotEmptyFile() {
         Task task = new Task("Title", "Desc", StatusTask.NEW);
         manager.setTasks(task.getTaskId(), task);
         loadFromFile(taskFile.toPath());
