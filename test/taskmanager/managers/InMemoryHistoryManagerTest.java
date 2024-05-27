@@ -7,6 +7,9 @@ import taskmanager.tasks.StatusTask;
 import taskmanager.tasks.Subtask;
 import taskmanager.tasks.Task;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,13 +22,24 @@ class InMemoryHistoryManagerTest {
     static Epic epic;
     static Subtask subtask;
 
+    static LocalDateTime startTime;
+    static Duration duration;
+
     @BeforeEach
     void beforeEach() {
+        LocalTime start = LocalTime.of(0, 0);
+        LocalTime finish = LocalTime.of(0, 3);
+
+        startTime = LocalDateTime.now();
+        duration = Duration.between(start, finish);
+
         historyManager = new InMemoryHistoryManager();
         historyManager.clear();
-        task = new Task("titleTask", "desc", StatusTask.NEW);
-        epic = new Epic("titleEpic", "desc");
-        subtask = new Subtask("titleSubtask", "desc", StatusTask.NEW, epic.getTaskId());
+        task = new Task("titleTask", "desc", StatusTask.NEW, startTime, duration);
+        epic = new Epic("titleEpic", "desc", startTime.plusMinutes(10), Duration.ZERO);
+        subtask = new Subtask(
+                "titleSubtask", "desc", StatusTask.NEW, epic.getTaskId(), startTime.plusMinutes(20), duration
+        );
     }
 
     @Test
@@ -34,7 +48,7 @@ class InMemoryHistoryManagerTest {
         assertNotNull(historyManager, "История не пустая.");
         assertEquals(1, historyManager.size(), "История не пустая.");
 
-        task = new Task("title Update", "desc", StatusTask.DONE);
+        task = new Task("title Update", "desc", StatusTask.DONE, startTime, duration);
 
         historyManager.add(task);
         List<Task> history = historyManager.getHistory();
@@ -64,8 +78,6 @@ class InMemoryHistoryManagerTest {
         historyManager.remove(task.getTaskId());
 
         assertNull(historyManager.getHistory(), "Задача не удалилась.");
-
-        historyManager.remove(task.getTaskId());
-        assertFalse(historyManager.remove(task.getTaskId()), "Метод удаления сработала.");
+        assertFalse(historyManager.remove(123), "Удаление несуществующей задачи.");
     }
 }

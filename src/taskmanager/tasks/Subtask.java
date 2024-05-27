@@ -1,11 +1,15 @@
 package taskmanager.tasks;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Subtask extends Task {
 
     private int epicId;
 
-    public Subtask(String title, String description, StatusTask statusTask, int epicId) {
-        super(title, description, statusTask);
+    public Subtask(String title, String description, StatusTask statusTask, int epicId, LocalDateTime startTime, Duration duration) {
+        super(title, description, statusTask, startTime, duration);
         this.epicId = epicId;
     }
 
@@ -20,17 +24,24 @@ public class Subtask extends Task {
                 ", description='" + this.getDescription() + '\'' +
                 ", taskID=" + this.getTaskId() +
                 ", statusTask=" + this.getStatusTask() +
+                ", startTime=" + this.getStartTime() +
+                ", endTime=" + this.getEndTime() +
+                ", duration=" + this.getDuration() +
                 ", epicID=" + this.getEpicId() +
                 '}';
     }
 
     @Override
     public String toStringToFile() {
-        return String.format("SUBTASK,%d,%s,%s,%s,%d\n",
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy - HH:mm");
+        String formatDateTime = this.getStartTime().format(formatter);
+        return String.format("SUBTASK,%d,%s,%s,%s,%s,%s,%d\n",
                 this.getTaskId(),
                 this.getTitle(),
                 this.getDescription(),
                 this.getStatusTask(),
+                formatDateTime,
+                this.getDuration().toString(),
                 this.epicId
         );
     }
@@ -44,6 +55,9 @@ public class Subtask extends Task {
     }
 
     public static Subtask copySubTask(Subtask task) {
-        return new Subtask(task.getTitle(), task.getDescription(), task.getStatusTask(), task.getEpicId());
+        return new Subtask(task.getTitle(), task.getDescription(),
+                task.getStatusTask(), task.getEpicId(),
+                task.getStartTime(), task.getDuration()
+        );
     }
 }

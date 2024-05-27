@@ -14,6 +14,9 @@ import java.io.Writer;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
@@ -40,7 +43,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     void save() {
         try (Writer fileWriter = new FileWriter(String.valueOf(taskFile))) {
-            fileWriter.write("type,id,title,description,statusTask,epic\n");
+            fileWriter.write("type,id,title,description,statusTask,startTime,duration,epic\n");
             for (Task task : tasks.values()) {
                 fileWriter.write(task.toStringToFile());
             }
@@ -57,18 +60,36 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     static void saveTaskFromString(String value) {
         String[] args = value.split(",");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy - HH:mm");
         switch (args[0]) {
             case "TASK" -> {
-                Task task = new Task(args[2], args[3], StatusTask.valueOf(args[4]));
+                Task task = new Task(
+                        args[2],
+                        args[3],
+                        StatusTask.valueOf(args[4]),
+                        LocalDateTime.parse(args[5], formatter),
+                        Duration.parse(args[6]));
                 tasks.put(task.getTaskId(), task);
             }
             case "EPIC" -> {
-                Epic epic = new Epic(args[2], args[3]);
+                Epic epic = new Epic(
+                        args[2],
+                        args[3],
+                        LocalDateTime.parse(args[5], formatter),
+                        Duration.parse(args[6]));
+                epic.setTaskId(Integer.parseInt(args[1]));
                 epics.put(epic.getTaskId(), epic);
             }
             case "SUBTASK" -> {
-                int epicId = Integer.parseInt(args[5].strip());
-                Subtask subtask = new Subtask(args[2], args[3], StatusTask.valueOf(args[4]), epicId);
+                int epicId = Integer.parseInt(args[7].strip());
+                Subtask subtask = new Subtask(
+                        args[2],
+                        args[3],
+                        StatusTask.valueOf(args[4]),
+                        epicId,
+                        LocalDateTime.parse(args[5], formatter),
+                        Duration.parse(args[6])
+                        );
                 subtasks.put(subtask.getTaskId(), subtask);
             }
         }
