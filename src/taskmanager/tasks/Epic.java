@@ -13,19 +13,6 @@ public class Epic extends Task {
     }
 
     @Override
-    public String toString() {
-        return "Epic{" +
-                "title='" + this.getTitle() + '\'' +
-                ", description='" + this.getDescription() + '\'' +
-                ", taskID=" + this.getTaskId() +
-                ", statusTask=" + this.getStatusTask() +
-                ", startTime=" + this.getStartTime() +
-                ", endTime=" + this.getEndTime() +
-                ", duration=" + this.getDuration() +
-                '}';
-    }
-
-    @Override
     public String toStringToFile() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy - HH:mm");
         String formatDateTime = this.getStartTime().format(formatter);
@@ -92,5 +79,18 @@ public class Epic extends Task {
 
     public void setLowStartTimeSubtaskForEpic(List<Subtask> subtaskList) {
         setStartTime(subtaskList.getFirst().getStartTime());
+    }
+
+    @Override
+    public String toString() {
+        return "Epic{" +
+                "title='" + this.getTitle() + '\'' +
+                ", description='" + this.getDescription() + '\'' +
+                ", taskID=" + this.getTaskId() +
+                ", statusTask=" + this.getStatusTask() +
+                ", startTime=" + this.getStartTime() +
+                ", endTime=" + this.getEndTime() +
+                ", duration=" + this.getDuration() +
+                '}';
     }
 }

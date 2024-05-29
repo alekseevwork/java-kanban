@@ -16,7 +16,6 @@ import java.nio.file.Path;
 public class Main {
 
     public static void main(String[] args) {
-//        TaskManager manager = Managers.getDefault();
         Path file = Path.of("resources\\tasksFile.csv");
         TaskManager manager = Managers.getBackedManager(file);
 
@@ -54,8 +53,5 @@ public class Main {
         System.out.println(manager.getTasks());
 
         manager.printOfSubtasksInEpic(epic1.getTaskId());
-
-//        manager.deleteEpicForID(epic1.getTaskId());
-
     }
 }

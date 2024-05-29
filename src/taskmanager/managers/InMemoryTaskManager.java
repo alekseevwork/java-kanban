@@ -7,10 +7,7 @@ import taskmanager.tasks.Subtask;
 import taskmanager.tasks.Task;
 
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeSet;
-import java.util.List;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
@@ -84,9 +81,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void setTasks(int taskId, Task task) {
-        if (task == null) {
-            throw new ErrorSavingTasksException("Передано null.");
-        }
+        checkingTaskIsNull(task);
         if (saveTaskInTreeMap(task)) {
             if (tasks.containsKey(taskId)) {
                 tasks.put(taskId, task);
@@ -99,30 +94,26 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void setSubtasks(int subtaskId, Subtask task) {
-        if (task == null) {
-            throw new ErrorSavingTasksException("Передано null.");
-        }
-        if (saveTaskInTreeMap(task)) {
+    public void setSubtasks(int subtaskId, Subtask subtask) {
+        checkingTaskIsNull(subtask);
+        if (saveTaskInTreeMap(subtask)) {
             if (subtasks.containsKey(subtaskId)) {
-                subtasks.put(subtaskId, task);
+                subtasks.put(subtaskId, subtask);
                 System.out.println("Задача изменена.");
             } else {
-                subtasks.put(subtaskId, task);
+                subtasks.put(subtaskId, subtask);
                 System.out.println("Задача заведена.");
             }
-            Epic epic = epics.get(task.getEpicId());
+            Epic epic = epics.get(subtask.getEpicId());
             epic.checkStatusSubtasks(subtasks);
-            epic.durationPlusSubtaskDuration(task.getDuration());
-            epic.updateStartTimeTask(task.getStartTime());
+            epic.durationPlusSubtaskDuration(subtask.getDuration());
+            epic.updateStartTimeTask(subtask.getStartTime());
         }
     }
 
     @Override
     public void setEpics(int taskId, Epic epic) {
-        if (epic == null) {
-            throw new ErrorSavingTasksException("Передано null.");
-        }
+        checkingTaskIsNull(epic);
         if (saveTaskInTreeMap(epic)) {
             if (epics.containsKey(taskId)) {
                 epics.put(taskId, epic);
@@ -131,6 +122,12 @@ public class InMemoryTaskManager implements TaskManager {
                 epics.put(taskId, epic);
                 System.out.println("Задача заведена.");
             }
+        }
+    }
+
+    void checkingTaskIsNull(Task task) {
+        if (task == null) {
+            throw new ErrorSavingTasksException("Передано null.");
         }
     }
 

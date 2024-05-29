@@ -18,20 +18,6 @@ public class Subtask extends Task {
     }
 
     @Override
-    public String toString() {
-        return "Subtask{" +
-                "title='" + this.getTitle() + '\'' +
-                ", description='" + this.getDescription() + '\'' +
-                ", taskID=" + this.getTaskId() +
-                ", statusTask=" + this.getStatusTask() +
-                ", startTime=" + this.getStartTime() +
-                ", endTime=" + this.getEndTime() +
-                ", duration=" + this.getDuration() +
-                ", epicID=" + this.getEpicId() +
-                '}';
-    }
-
-    @Override
     public String toStringToFile() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy - HH:mm");
         String formatDateTime = this.getStartTime().format(formatter);
@@ -59,5 +45,19 @@ public class Subtask extends Task {
                 task.getStatusTask(), task.getEpicId(),
                 task.getStartTime(), task.getDuration()
         );
+    }
+
+    @Override
+    public String toString() {
+        return "Subtask{" +
+                "title='" + this.getTitle() + '\'' +
+                ", description='" + this.getDescription() + '\'' +
+                ", taskID=" + this.getTaskId() +
+                ", statusTask=" + this.getStatusTask() +
+                ", startTime=" + this.getStartTime() +
+                ", endTime=" + this.getEndTime() +
+                ", duration=" + this.getDuration() +
+                ", epicID=" + this.getEpicId() +
+                '}';
     }
 }

@@ -22,19 +22,6 @@ public class Task implements Comparable<Task> {
         this.taskId = this.hashCode();
     }
 
-    @Override
-    public String toString() {
-        return "Task{" +
-                "title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", taskID=" + taskId +
-                ", statusTask=" + statusTask +
-                ", startTime=" + startTime +
-                ", endTime=" + this.getEndTime() +
-                ", duration=" + duration +
-                '}';
-    }
-
     public String toStringToFile() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy - HH:mm");
         String formatDateTime = startTime.format(formatter);
@@ -46,38 +33,6 @@ public class Task implements Comparable<Task> {
                 formatDateTime,
                 duration.toString()
         );
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Task task = (Task) o;
-        return taskId == task.taskId &&
-                Objects.equals(title, task.title) &&
-                Objects.equals(description, task.description) &&
-                statusTask == task.statusTask;
-    }
-
-    @Override
-    public int compareTo(Task o) {
-        if (this.startTime.isAfter(o.startTime)) {
-            return 1;
-        } else if (this.startTime.isBefore(o.startTime)) {
-            return -1;
-        } else {
-            return 0;
-        }
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(title, description, taskId, statusTask, toStringToFile());
-    }
-
-    public void setTitle(String title) {
-
-        this.title = title;
     }
 
     public LocalDateTime getEndTime() {
@@ -130,5 +85,50 @@ public class Task implements Comparable<Task> {
 
     public static Task copyTask(Task task) {
         return new Task(task.getTitle(), task.getDescription(), task.getStatusTask(), task.startTime, task.duration);
+    }
+
+    @Override
+    public int compareTo(Task o) {
+        if (this.startTime.isAfter(o.startTime)) {
+            return 1;
+        } else if (this.startTime.isBefore(o.startTime)) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", taskID=" + taskId +
+                ", statusTask=" + statusTask +
+                ", startTime=" + startTime +
+                ", endTime=" + this.getEndTime() +
+                ", duration=" + duration +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return taskId == task.taskId &&
+                Objects.equals(title, task.title) &&
+                Objects.equals(description, task.description) &&
+                statusTask == task.statusTask;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, description, taskId, statusTask, toStringToFile());
+    }
+
+    public void setTitle(String title) {
+
+        this.title = title;
     }
 }
