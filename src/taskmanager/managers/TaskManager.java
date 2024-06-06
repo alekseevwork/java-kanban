@@ -5,8 +5,11 @@ import taskmanager.tasks.Subtask;
 import taskmanager.tasks.Task;
 
 import java.util.Map;
+import java.util.TreeSet;
 
 public interface TaskManager {
+
+    TreeSet<Task> getPrioritizedTasks();
 
     void printOfSubtasksInEpic(int epicId);
 
