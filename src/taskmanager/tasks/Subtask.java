@@ -1,5 +1,7 @@
 package taskmanager.tasks;
 
+import taskmanager.managers.Managers;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -19,8 +21,7 @@ public class Subtask extends Task {
 
     @Override
     public String toStringToFile() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy - HH:mm");
-        String formatDateTime = this.getStartTime().format(formatter);
+        String formatDateTime = this.getStartTime().format(Managers.timeFormatter);
         return String.format("SUBTASK,%d,%s,%s,%s,%s,%s,%d\n",
                 this.getTaskId(),
                 this.getTitle(),

@@ -1,5 +1,7 @@
 package taskmanager.tasks;
 
+import taskmanager.managers.Managers;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,8 +16,7 @@ public class Epic extends Task {
 
     @Override
     public String toStringToFile() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy - HH:mm");
-        String formatDateTime = this.getStartTime().format(formatter);
+        String formatDateTime = this.getStartTime().format(Managers.timeFormatter);
         return String.format("EPIC,%d,%s,%s,%s,%s,%s\n",
                 this.getTaskId(),
                 this.getTitle(),
