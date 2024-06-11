@@ -2,9 +2,11 @@ package taskmanager.managers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import taskmanager.server.LocalTimeTypeAdapter;
+import taskmanager.server.typeadapters.DurationTypeAdapter;
+import taskmanager.server.typeadapters.LocalDateTimeTypeAdapter;
 
 import java.nio.file.Path;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -39,7 +41,8 @@ public final class Managers {
 
     public static Gson getGson() {
         return new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalTimeTypeAdapter())
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                .registerTypeAdapter(Duration.class, new DurationTypeAdapter())
                 .create();
     }
 }
