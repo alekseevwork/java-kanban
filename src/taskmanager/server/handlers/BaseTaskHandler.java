@@ -3,22 +3,23 @@ package taskmanager.server.handlers;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import taskmanager.exceptions.ErrorSavingTasksException;
+import taskmanager.exceptions.TaskCrossingTimeException;
 import taskmanager.managers.Managers;
 import taskmanager.managers.TaskManager;
 import taskmanager.tasks.Task;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 
-public class BaseHttpHandler implements HttpHandler {
+public class BaseTaskHandler implements HttpHandler {
 
     protected final Gson gson = Managers.getGson();
     protected final TaskManager manager = Managers.getDefault();
     String path;
 
-    BaseHttpHandler(String path) {
+    public BaseTaskHandler(String path) {
         this.path = path;
     }
 
@@ -33,28 +34,41 @@ public class BaseHttpHandler implements HttpHandler {
                         int taskId = parseId(pathUri);
                         if (taskId != -1) {
                             sendText(exchange, responseGetTasksById(taskId));
-                            System.out.println("get tasks for id"); // delete later
                         } else {
                             exchange.sendResponseHeaders(405, 0);
-                            System.out.println("bad id"); // delete later
                         }
                         break;
                     }
-
                     if (Pattern.matches("^" + path + "$", pathUri)) {
                         sendText(exchange, responseGetTasks());
-                        System.out.println("get tasks"); // delete later
                         break;
+                    }
+                    break;
+                }
+                case "POST": {
+                    try {
+                        String responseBody = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+                        responsePostTask(responseBody);
+                        break;
+                    } catch (ErrorSavingTasksException e) {
+                        exchange.sendResponseHeaders(405, 0);
+                    } catch (TaskCrossingTimeException e) {
+                        sendHasInteractions(exchange);
                     }
                     break;
 
                 }
-                case "POST": {
-                    String name = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
-
-                }
                 case "DELETE": {
-                    //                handlePostComments(exchange);
+                    if (Pattern.matches("^" + path + "/[-\\d]+$", pathUri)) {
+                        int taskId = parseId(pathUri);
+                        if (taskId != -1) {
+                            responseDeleteTask(taskId);
+                            exchange.sendResponseHeaders(202, 0);
+                        } else {
+                            exchange.sendResponseHeaders(405, 0);
+                        }
+                        break;
+                    }
                     break;
                 }
                 default:
@@ -98,14 +112,23 @@ public class BaseHttpHandler implements HttpHandler {
         h.close();
     }
 
-    String responseGetTasks () {   // override later
+    String responseGetTasks() {
         return gson.toJson(manager.getTasks());
     }
 
-    String responseGetTasksById(int taskId) {   // override later
+    String responseGetTasksById(int taskId) {
         if (manager.getTasksForId(taskId) == null) {
             return gson.toJson(null);
         }
         return gson.toJson(manager.getTasksForId(taskId));
+    }
+
+    void responsePostTask(String responseBody) {
+        Task task = gson.fromJson(responseBody, Task.class);
+        manager.setTasks(task.getTaskId(), task);
+    }
+
+    void responseDeleteTask(int taskId) {
+        manager.deleteTasksForID(taskId);
     }
 }
