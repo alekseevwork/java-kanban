@@ -32,43 +32,45 @@ public class BaseTaskHandler implements HttpHandler {
                 case "GET": {
                     if (Pattern.matches("^" + path + "/[-\\d]+$", pathUri)) {
                         int taskId = parseId(pathUri);
-                        if (taskId != -1) {
-                            sendText(exchange, responseGetTasksById(taskId));
-                        } else {
-                            exchange.sendResponseHeaders(405, 0);
-                        }
+                        sendText(exchange, responseGetTasksById(taskId));
                         break;
                     }
                     if (Pattern.matches("^" + path + "$", pathUri)) {
                         sendText(exchange, responseGetTasks());
                         break;
                     }
+                    if (Pattern.matches("^" + path + "/[-\\d+]+/subtasks", pathUri)) {
+                        pathUri = pathUri.substring(0, pathUri.lastIndexOf("/"));
+                        int taskId = parseId(pathUri);
+                        sendText(exchange, responseGetSubtasksInEpic(taskId));
+                        break;
+                    }
+                    sendBadRequest(exchange);
                     break;
                 }
                 case "POST": {
                     try {
                         String responseBody = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
                         responsePostTask(responseBody);
+                        sendText(exchange, "task add");
                         break;
                     } catch (ErrorSavingTasksException e) {
-                        exchange.sendResponseHeaders(405, 0);
+                        sendBadRequest(exchange);
                     } catch (TaskCrossingTimeException e) {
                         sendHasInteractions(exchange);
                     }
+                    sendBadRequest(exchange);
                     break;
-
                 }
                 case "DELETE": {
                     if (Pattern.matches("^" + path + "/[-\\d]+$", pathUri)) {
                         int taskId = parseId(pathUri);
-                        if (taskId != -1) {
-                            responseDeleteTask(taskId);
-                            exchange.sendResponseHeaders(202, 0);
-                        } else {
-                            exchange.sendResponseHeaders(405, 0);
-                        }
+                        responseDeleteTask(taskId);
+                        sendText(exchange, "task delete");
+                        exchange.sendResponseHeaders(202, 0);
                         break;
                     }
+                    sendBadRequest(exchange);
                     break;
                 }
                 default:
@@ -83,11 +85,7 @@ public class BaseTaskHandler implements HttpHandler {
 
     int parseId(String path) {
         String id = path.substring(path.lastIndexOf("/") + 1);
-        try {
-            return Integer.parseInt(id);
-        } catch (NumberFormatException e) {
-            return -1;
-        }
+        return Integer.parseInt(id);
     }
 
     protected void sendText(HttpExchange h, String text) throws IOException {
@@ -107,7 +105,14 @@ public class BaseTaskHandler implements HttpHandler {
 
     protected void sendHasInteractions(HttpExchange h) throws IOException {
         byte[] resp = "Task intersects with existing ones".getBytes(StandardCharsets.UTF_8);
-        h.sendResponseHeaders(400, resp.length);
+        h.sendResponseHeaders(406, resp.length);
+        h.getResponseBody().write(resp);
+        h.close();
+    }
+
+    protected void sendBadRequest(HttpExchange h) throws IOException {
+        byte[] resp = "Bad request".getBytes(StandardCharsets.UTF_8);
+        h.sendResponseHeaders(404, resp.length);
         h.getResponseBody().write(resp);
         h.close();
     }
@@ -130,5 +135,12 @@ public class BaseTaskHandler implements HttpHandler {
 
     void responseDeleteTask(int taskId) {
         manager.deleteTasksForID(taskId);
+    }
+
+    String responseGetSubtasksInEpic(int taskId) {
+        if (manager.getSubtasksInEpic(taskId) == null) {
+            return gson.toJson(null);
+        }
+        return gson.toJson(manager.getSubtasksInEpic(taskId));
     }
 }

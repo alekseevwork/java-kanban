@@ -75,8 +75,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 Epic epic = new Epic(
                         args[2],
                         args[3],
-                        LocalDateTime.parse(args[5], formatter),
-                        Duration.parse(args[6]));
+                        LocalDateTime.parse(args[5], formatter));
                 epic.setTaskId(Integer.parseInt(args[1]));
                 epics.put(epic.getTaskId(), epic);
             }
@@ -89,15 +88,30 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         epicId,
                         LocalDateTime.parse(args[5], formatter),
                         Duration.parse(args[6])
-                        );
+                );
                 subtasks.put(subtask.getTaskId(), subtask);
             }
         }
     }
 
     @Override
-    public void deleteTypeTasks(Object object) {
-        super.deleteTypeTasks(object);
+    public void deleteTasks() {
+        tasks.clear();
+        System.out.println("Задачи удалены.");
+        save();
+    }
+
+    @Override
+    public void deleteEpics() {
+        epics.clear();
+        System.out.println("Задачи удалены.");
+        save();
+    }
+
+    @Override
+    public void deleteSubtasks() {
+        subtasks.clear();
+        System.out.println("Задачи удалены.");
         save();
     }
 

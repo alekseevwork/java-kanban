@@ -26,8 +26,8 @@ class TaskTest {
 
     @Test
     void successorOfTaskClassAreEqualToEachOtherIfIdIsEqual() {
-        Task task1 = new Epic("Title", "Desc", startTime, duration);
-        Task task2 = new Epic("Title", "Desc", startTime, duration);
+        Task task1 = new Epic("Title", "Desc", startTime);
+        Task task2 = new Epic("Title", "Desc", startTime);
 
         assertNotNull(task1, "Задача не найдена.");
         assertEquals(task1, task2, "Задачи не совпадают.");

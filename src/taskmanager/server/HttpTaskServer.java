@@ -18,12 +18,19 @@ public class HttpTaskServer {
         server.createContext("/subtasks", new SubtaskHandler("/subtasks"));
         server.createContext("/history", new HistoryHandler());
         server.createContext("/prioritized", new PrioritizedHandler());
+    }
 
+    public void start() {
+        server.start();
+    }
+
+    public void stop() {
+        server.stop(0);
     }
 
     public static void main(String[] args) throws IOException {
         HttpTaskServer taskServer = new HttpTaskServer();
-        taskServer.server.start();
-        taskServer.server.stop(5);
+        taskServer.start();
+//        taskServer.stop();
     }
 }

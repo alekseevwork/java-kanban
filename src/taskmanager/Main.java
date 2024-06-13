@@ -28,7 +28,7 @@ public class Main {
 
         Task task = new Task("Title", "Desc", StatusTask.NEW, startTime.plusMinutes(100), duration);
 
-        Epic epic1 = new Epic("TitleE1", "EpicDic", startTime.plusMinutes(10), Duration.ZERO);
+        Epic epic1 = new Epic("TitleE1", "EpicDic", startTime.plusMinutes(10));
         Subtask sub1 = new Subtask(
                 "Sub1", "sada", StatusTask.NEW, epic1.getTaskId(), startTime.plusMinutes(21), duration
         );
@@ -47,11 +47,11 @@ public class Main {
         manager.setTasks(task.getTaskId(), task);
         manager.setTasks(1212, null);
 
-        Epic epic2 = new Epic("TitleE", "EpicDic", startTime.plusMinutes(5), Duration.ZERO);
+        Epic epic2 = new Epic("TitleE", "EpicDic", startTime.plusMinutes(5));
         manager.setEpics(epic2.getTaskId(), epic2);
         System.out.println(manager.getPrioritizedTasks());
         System.out.println(manager.getTasks());
 
-        manager.printOfSubtasksInEpic(epic1.getTaskId());
+        manager.getSubtasksInEpic(epic1.getTaskId());
     }
 }

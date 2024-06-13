@@ -64,7 +64,7 @@ class InMemoryTaskManagerTest {
 
     @Test
     void addingEpicInEpicsListAndGettingEpicById() {
-        Epic epic = new Epic("Title", "Disc", startTime, Duration.ZERO);
+        Epic epic = new Epic("Title", "Disc", startTime);
         manager.setEpics(epic.getTaskId(), epic);
 
         assertEquals(1, epics.size(), "Неверное количество задач.");
@@ -77,7 +77,7 @@ class InMemoryTaskManagerTest {
 
     @Test
     void addingSubtaskInSubtasksListAndGettingSubtaskById() {
-        Epic epic = new Epic("Title", "Disc", startTime, Duration.ZERO);
+        Epic epic = new Epic("Title", "Disc", startTime);
         manager.setEpics(epic.getTaskId(), epic);
         Subtask subtask = new Subtask(
                 "Title", "Desc", StatusTask.NEW, epic.getTaskId(), startTime.plusMinutes(20), duration);
@@ -94,14 +94,14 @@ class InMemoryTaskManagerTest {
 
     @Test
     void changingEpicStatusWhenAddingSubtaskNEW() {
-        Epic epic = new Epic("Title", "Disc", startTime, Duration.ZERO);
+        Epic epic = new Epic("Title", "Disc", startTime);
         int indexOfNewStatus = epic.toString().indexOf("NEW");
         assertTrue(indexOfNewStatus > 0, "Неверный статус.");
     }
 
     @Test
     void changingEpicStatusWhenAddingSubtaskInProgress() {
-        Epic epic = new Epic("Title", "Disc", startTime, Duration.ZERO);
+        Epic epic = new Epic("Title", "Disc", startTime);
         manager.setEpics(epic.getTaskId(), epic);
         Subtask subtask = new Subtask(
                 "Title", "Desc", StatusTask.IN_PROGRESS, epic.getTaskId(), startTime.plusMinutes(20), duration);
@@ -114,7 +114,7 @@ class InMemoryTaskManagerTest {
 
     @Test
     void changingEpicStatusWhenAddingSubtaskDone() {
-        Epic epic = new Epic("Title", "Disc", startTime, Duration.ZERO);
+        Epic epic = new Epic("Title", "Disc", startTime);
         manager.setEpics(epic.getTaskId(), epic);
         Subtask subtask = new Subtask(
                 "Title", "Desc", StatusTask.DONE, epic.getTaskId(), startTime.plusMinutes(20), duration);
@@ -136,7 +136,7 @@ class InMemoryTaskManagerTest {
 
     @Test
     void deleteEpicByIdInEpicsList() {
-        Epic epic = new Epic("Title", "Disc", startTime, Duration.ZERO);
+        Epic epic = new Epic("Title", "Disc", startTime);
         Subtask subtask = new Subtask(
                 "Title", "Desc", StatusTask.IN_PROGRESS, epic.getTaskId(), startTime.plusMinutes(20), duration);
         manager.setEpics(epic.getTaskId(), epic);
@@ -153,7 +153,7 @@ class InMemoryTaskManagerTest {
     void deleteTypeTasksInList() {
         Task task = new Task("Title", "Desc", StatusTask.NEW, startTime, duration);
         Task task2 = new Task("Title2", "Desc", StatusTask.NEW, startTime.plusMinutes(5), duration);
-        Epic epic = new Epic("Title", "Disc", startTime.plusMinutes(10), Duration.ZERO);
+        Epic epic = new Epic("Title", "Disc", startTime.plusMinutes(10));
         Subtask subtask = new Subtask(
                 "Title", "Desc", StatusTask.IN_PROGRESS, epic.getTaskId(), startTime.plusMinutes(20), duration);
 
@@ -162,9 +162,9 @@ class InMemoryTaskManagerTest {
         manager.setEpics(epic.getTaskId(), epic);
         manager.setSubtasks(subtask.getTaskId(), subtask);
 
-        manager.deleteTypeTasks(tasks);
-        manager.deleteTypeTasks(epics);
-        manager.deleteTypeTasks(subtasks);
+        manager.deleteTasks();
+        manager.deleteEpics();
+        manager.deleteSubtasks();
 
         assertEquals("{}", tasks.toString(), "Задача не удалена.");
         assertEquals("{}", epics.toString(), "Задача не удалена.");
@@ -194,7 +194,7 @@ class InMemoryTaskManagerTest {
 
     @Test
     void setSubtasksFieldsNotChangeAfterAddSubtasksToManager() {
-        Epic epic = new Epic("Title", "Disc", startTime, Duration.ZERO);
+        Epic epic = new Epic("Title", "Disc", startTime);
         Subtask subtask = new Subtask(
                 "Title", "Desc", StatusTask.IN_PROGRESS, epic.getTaskId(), startTime.plusMinutes(20), duration);
         manager.setEpics(epic.getTaskId(), epic);
@@ -234,7 +234,7 @@ class InMemoryTaskManagerTest {
 
     @Test
     void changeDurationEpicWhenAddSubtask() {
-        Epic epic = new Epic("Title", "Disc", startTime, Duration.ZERO);
+        Epic epic = new Epic("Title", "Disc", startTime);
         Subtask subtask = new Subtask(
                 "Title", "Desc", StatusTask.IN_PROGRESS, epic.getTaskId(), startTime.plusMinutes(10), duration);
         Subtask subtaskSecond = new Subtask(

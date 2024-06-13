@@ -20,21 +20,27 @@ public class InMemoryTaskManager implements TaskManager {
     public static HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Override
-    public void printOfSubtasksInEpic(int epicId) {
-        subtasks.values().stream()
+    public List<Subtask> getSubtasksInEpic(int epicId) {
+        return subtasks.values().stream()
                 .filter(subtask -> subtask.getEpicId() == epicId)
-                .forEach(System.out::println);
+                .toList();
     }
 
     @Override
-    public void deleteTypeTasks(Object object) {
-        if (object == tasks) {
-            tasks.clear();
-        } else if (object == subtasks) {
-            subtasks.clear();
-        } else if (object == epics) {
-            epics.clear();
-        }
+    public void deleteTasks() {
+        tasks.clear();
+        System.out.println("Задачи удалены.");
+    }
+
+    @Override
+    public void deleteEpics() {
+        epics.clear();
+        System.out.println("Задачи удалены.");
+    }
+
+    @Override
+    public void deleteSubtasks() {
+        subtasks.clear();
         System.out.println("Задачи удалены.");
     }
 

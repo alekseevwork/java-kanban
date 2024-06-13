@@ -12,7 +12,7 @@ class EpicTest {
 
     @Test
     void statusOfEpicFirstCreatedShouldBeNew() {
-        Epic epic = new Epic("Title", "Disc", LocalDateTime.now(), Duration.ZERO);
+        Epic epic = new Epic("Title", "Disc", LocalDateTime.now());
 
         assertNotNull(epic, "Задача не найдена.");
         assertEquals(StatusTask.NEW, epic.getStatusTask(), "Неверный статус.");
@@ -23,7 +23,7 @@ class EpicTest {
         LocalTime start = LocalTime.of(0, 0);
         LocalTime finish = LocalTime.of(0, 3);
         Duration duration = Duration.between(start, finish);
-        Epic epic = new Epic("Title", "Disc", LocalDateTime.now(), Duration.ZERO);
+        Epic epic = new Epic("Title", "Disc", LocalDateTime.now());
 
         epic.durationPlusSubtaskDuration(duration);
         assertEquals(duration, epic.getDuration(), "Время задачи не изменилось.");
@@ -34,7 +34,7 @@ class EpicTest {
 
     @Test
     void changingStartTimeEpic() {
-        Epic epic = new Epic("Title", "Disc", LocalDateTime.now(), Duration.ZERO);
+        Epic epic = new Epic("Title", "Disc", LocalDateTime.now());
 
         LocalDateTime now = LocalDateTime.now().plusMinutes(20);
         epic.updateStartTimeTask(now);

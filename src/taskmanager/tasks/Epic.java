@@ -4,14 +4,13 @@ import taskmanager.managers.Managers;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
 public class Epic extends Task {
 
-    public Epic(String title, String description, LocalDateTime startTime, Duration duration) {
-        super(title, description, StatusTask.NEW, startTime, duration);
+    public Epic(String title, String description, LocalDateTime startTime) {
+        super(title, description, StatusTask.NEW, startTime, Duration.ZERO);
     }
 
     @Override
@@ -57,7 +56,8 @@ public class Epic extends Task {
     }
 
     public static Epic copyEpic(Epic task) {
-        Epic copy = new Epic(task.getTitle(), task.getDescription(), task.getStartTime(), task.getDuration());
+        Epic copy = new Epic(task.getTitle(), task.getDescription(), task.getStartTime());
+        copy.setDuration(task.getDuration());
         copy.setStatusTask(task.getStatusTask());
         return copy;
     }
