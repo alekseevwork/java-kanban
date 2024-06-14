@@ -13,8 +13,8 @@ public class LocalDateTimeTypeAdapter extends TypeAdapter<LocalDateTime> {
     private final DateTimeFormatter timeFormatter = Managers.timeFormatter;
 
     @Override
-    public void write(JsonWriter jsonWriter, LocalDateTime LocalDateTime) throws IOException {
-        jsonWriter.value(LocalDateTime.format(timeFormatter));
+    public void write(JsonWriter jsonWriter, LocalDateTime localDateTime) throws IOException {
+        jsonWriter.value(localDateTime.format(timeFormatter));
     }
 
     @Override
