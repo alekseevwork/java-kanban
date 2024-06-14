@@ -43,4 +43,10 @@ public interface TaskManager {
     Map<Integer, Epic> getEpics();
 
     Map<Integer, Subtask> getSubtasks();
+
+    List<Task> getHistory();
+
+    void deletePrioritizedList();
+
+    void deleteHistory();
 }

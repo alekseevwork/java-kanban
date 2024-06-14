@@ -29,19 +29,16 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteTasks() {
         tasks.clear();
-        System.out.println("Задачи удалены.");
     }
 
     @Override
     public void deleteEpics() {
         epics.clear();
-        System.out.println("Задачи удалены.");
     }
 
     @Override
     public void deleteSubtasks() {
         subtasks.clear();
-        System.out.println("Задачи удалены.");
     }
 
     @Override
@@ -188,6 +185,21 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public TreeSet<Task> getPrioritizedTasks() {
         return treeTasks;
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
+    }
+
+    @Override
+    public void deleteHistory() {
+        historyManager.clear();
+    }
+
+    @Override
+    public void deletePrioritizedList() {
+        treeTasks.clear();
     }
 
     static boolean saveTaskInTreeMap(Task task) {

@@ -39,6 +39,8 @@ public class HttpTaskServerTest {
         manager.deleteTasks();
         manager.deleteEpics();
         manager.deleteSubtasks();
+        manager.deletePrioritizedList();
+        manager.deleteHistory();
         taskServer.start();
     }
 
@@ -49,7 +51,7 @@ public class HttpTaskServerTest {
 
     @Test
     public void testAddTaskMethodPost() throws IOException, InterruptedException {
-        Task task = new Task("Test 2", "Testing task 2", StatusTask.NEW, LocalDateTime.now(), Duration.ofMinutes(5));
+        Task task = new Task("Test 1", "Testing task 1", StatusTask.NEW, LocalDateTime.now(), Duration.ofMinutes(5));
         String taskJson = gson.toJson(task);
 
         HttpClient client = HttpClient.newHttpClient();
@@ -64,7 +66,15 @@ public class HttpTaskServerTest {
 
         assertNotNull(tasksFromManager, "Задачи не возвращаются");
         assertEquals(1, tasksFromManager.size(), "Некорректное количество задач");
-        assertEquals("Test 2", tasksFromManager.getFirst().getTitle(), "Некорректное имя задачи");
+        assertEquals("Test 1", tasksFromManager.getFirst().getTitle(), "Некорректное имя задачи");
+
+        Task task2 = new Task("Test 2", "Testing task 2", StatusTask.NEW, LocalDateTime.now().minusMinutes(2), Duration.ofMinutes(5));
+        String taskJson2 = gson.toJson(task2);
+
+        HttpRequest requestBad = HttpRequest.newBuilder().uri(url).POST(HttpRequest.BodyPublishers.ofString(taskJson2)).build();
+
+        HttpResponse<String> responseBad = client.send(requestBad, HttpResponse.BodyHandlers.ofString());
+        assertEquals(406, responseBad.statusCode());
     }
 
     @Test
@@ -122,16 +132,14 @@ public class HttpTaskServerTest {
         HttpRequest request = HttpRequest.newBuilder().uri(url).header("Content-Type", "application/json;charset=utf-8").GET().build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        String body = response.body();
+
         Type intTaskType = new TypeToken<Map<Integer, Task>>() {
         }.getType();
-        Map<Integer, Task> mapTasks = gson.fromJson(body, intTaskType);
-
-        Task firstGetTask = mapTasks.values().stream().toList().getFirst();
+        Map<Integer, Task> mapTasks = gson.fromJson(response.body(), intTaskType);
 
         assertEquals(200, response.statusCode());
         assertEquals(2, mapTasks.size(), "Некорректное количество задач");
-        assertEquals(task1, firstGetTask, "Некорректно сохранились задачи");
+        assertEquals(mapTasks, manager.getTasks(), "Некорректно сохранились задачи");
     }
 
     @Test
@@ -207,27 +215,46 @@ public class HttpTaskServerTest {
         LocalDateTime startTime = LocalDateTime.now();
         Task task = new Task("title Task1", "desc", StatusTask.NEW, startTime.plusMinutes(5), Duration.ofMinutes(2));
         Task task2 = new Task("title Task2", "desc", StatusTask.NEW, startTime, Duration.ofMinutes(2));
-        Epic epic = new Epic("title Epic", "desc", startTime.plusMinutes(10));
-        Subtask subtask = new Subtask("title Subtask", "desc",
-                StatusTask.NEW, epic.getTaskId(), startTime.plusMinutes(20), Duration.ofMinutes(3)
-        );
 
         manager.setTasks(task.getTaskId(), task);
         manager.setTasks(task2.getTaskId(), task2);
-        manager.setEpics(epic.getTaskId(), epic);
-        manager.setSubtasks(subtask.getTaskId(), subtask);
 
-        manager.getTasksForId(task.getTaskId());
         manager.getTasksForId(task2.getTaskId());
-        manager.getEpicForId(epic.getTaskId());
-        manager.getSubTaskForId(subtask.getTaskId());
+        manager.getTasksForId(task.getTaskId());
 
         HttpClient client = HttpClient.newHttpClient();
         URI url = URI.create("http://localhost:8080/history");
         HttpRequest request = HttpRequest.newBuilder().uri(url).GET().build();
-
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.body());
+        Type intTaskType = new TypeToken<List<Task>>() {
+        }.getType();
+        List<Task> listTasks = gson.fromJson(response.body(), intTaskType);
+
         assertEquals(200, response.statusCode());
+        assertEquals(listTasks.getFirst(), task2, "Некорректно отображается история запросов");
+    }
+
+    @Test
+    public void testMethodGetPrioritizedTask() throws IOException, InterruptedException {
+        LocalDateTime startTime = LocalDateTime.now();
+        Task task = new Task("title Task1", "desc", StatusTask.NEW, startTime.plusMinutes(5), Duration.ofMinutes(2));
+        Task task2 = new Task("title Task2", "desc", StatusTask.NEW, startTime, Duration.ofMinutes(2));
+
+        manager.setTasks(task.getTaskId(), task);
+        manager.setTasks(task2.getTaskId(), task2);
+
+        manager.getTasksForId(task.getTaskId());
+        manager.getTasksForId(task2.getTaskId());
+
+        HttpClient client = HttpClient.newHttpClient();
+        URI url = URI.create("http://localhost:8080/prioritized");
+        HttpRequest request = HttpRequest.newBuilder().uri(url).GET().build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        Type intTaskType = new TypeToken<List<Task>>() {
+        }.getType();
+        List<Task> listTasks = gson.fromJson(response.body(), intTaskType);
+
+        assertEquals(200, response.statusCode());
+        assertEquals(listTasks.getFirst(), task2, "Некорректно отображается история запросов");
     }
 }
