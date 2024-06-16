@@ -1,4 +1,4 @@
-package taskmanager.server.handlers;
+package taskmanager.servers.handlers;
 
 import taskmanager.tasks.Subtask;
 

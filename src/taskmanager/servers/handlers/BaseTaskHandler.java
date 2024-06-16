@@ -1,4 +1,4 @@
-package taskmanager.server.handlers;
+package taskmanager.servers.handlers;
 
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;

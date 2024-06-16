@@ -1,7 +1,11 @@
-package taskmanager.server;
+package taskmanager.servers;
 
 import com.sun.net.httpserver.HttpServer;
-import taskmanager.server.handlers.*;
+import taskmanager.servers.handlers.BaseTaskHandler;
+import taskmanager.servers.handlers.EpicHandler;
+import taskmanager.servers.handlers.SubtaskHandler;
+import taskmanager.servers.handlers.HistoryHandler;
+import taskmanager.servers.handlers.PrioritizedHandler;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -31,6 +35,5 @@ public class HttpTaskServer {
     public static void main(String[] args) throws IOException {
         HttpTaskServer taskServer = new HttpTaskServer();
         taskServer.start();
-//        taskServer.stop();
     }
 }

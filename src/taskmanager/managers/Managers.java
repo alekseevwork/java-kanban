@@ -2,8 +2,8 @@ package taskmanager.managers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import taskmanager.server.typeadapters.DurationTypeAdapter;
-import taskmanager.server.typeadapters.LocalDateTimeTypeAdapter;
+import taskmanager.servers.type_adapters.DurationTypeAdapter;
+import taskmanager.servers.type_adapters.LocalDateTimeTypeAdapter;
 
 import java.nio.file.Path;
 import java.time.Duration;
