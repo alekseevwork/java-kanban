@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class SubtaskTest {
     private static Subtask subtask1;
     private static Subtask subtask2;
-    private static final Epic epic = new Epic("Epic", "Desc", LocalDateTime.now(), Duration.ZERO);
+    private static final Epic epic = new Epic("Epic", "Desc", LocalDateTime.now());
 
 
     @BeforeEach

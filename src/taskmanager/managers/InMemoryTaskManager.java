@@ -20,22 +20,25 @@ public class InMemoryTaskManager implements TaskManager {
     public static HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Override
-    public void printOfSubtasksInEpic(int epicId) {
-        subtasks.values().stream()
+    public List<Subtask> getSubtasksInEpic(int epicId) {
+        return subtasks.values().stream()
                 .filter(subtask -> subtask.getEpicId() == epicId)
-                .forEach(System.out::println);
+                .toList();
     }
 
     @Override
-    public void deleteTypeTasks(Object object) {
-        if (object == tasks) {
-            tasks.clear();
-        } else if (object == subtasks) {
-            subtasks.clear();
-        } else if (object == epics) {
-            epics.clear();
-        }
-        System.out.println("Задачи удалены.");
+    public void deleteTasks() {
+        tasks.clear();
+    }
+
+    @Override
+    public void deleteEpics() {
+        epics.clear();
+    }
+
+    @Override
+    public void deleteSubtasks() {
+        subtasks.clear();
     }
 
     @Override
@@ -182,6 +185,21 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public TreeSet<Task> getPrioritizedTasks() {
         return treeTasks;
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
+    }
+
+    @Override
+    public void deleteHistory() {
+        historyManager.clear();
+    }
+
+    @Override
+    public void deletePrioritizedList() {
+        treeTasks.clear();
     }
 
     static boolean saveTaskInTreeMap(Task task) {

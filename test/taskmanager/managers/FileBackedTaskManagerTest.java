@@ -72,7 +72,7 @@ class FileBackedTaskManagerTest {
     @Test
     void testLoadFromNotEmptyFile() {
         Task task = new Task("Title", "Desc", StatusTask.NEW, startTime, duration);
-        Epic epic = new Epic("Title", "Desc", startTime.plusMinutes(10), Duration.ZERO);
+        Epic epic = new Epic("Title", "Desc", startTime.plusMinutes(10));
         Subtask subtask = new Subtask(
                 "Title", "Desc", StatusTask.NEW, epic.getTaskId(), startTime.plusMinutes(20), duration);
         manager.setTasks(task.getTaskId(), task);
@@ -94,7 +94,7 @@ class FileBackedTaskManagerTest {
     void checkingSaveTasksFromString() {
         Task task = new Task("Title", "Desc", StatusTask.NEW, startTime, duration);
 
-        Epic epic = new Epic("Title", "Desc", startTime.plusMinutes(10), Duration.ZERO);
+        Epic epic = new Epic("Title", "Desc", startTime.plusMinutes(10));
         Subtask subtask = new Subtask(
                 "Title", "Desc", StatusTask.NEW, epic.getTaskId(), startTime.plusMinutes(20), duration);
 
@@ -145,7 +145,7 @@ class FileBackedTaskManagerTest {
     void checkingDeleteTasks() {
         Task task = new Task("Title", "Desc", StatusTask.NEW, startTime, duration);
 
-        Epic epic = new Epic("Title", "Desc", startTime.plusMinutes(10), Duration.ZERO);
+        Epic epic = new Epic("Title", "Desc", startTime.plusMinutes(10));
         Subtask subtask = new Subtask(
                 "Title", "Desc", StatusTask.NEW, epic.getTaskId(), startTime.plusMinutes(20), duration);
 

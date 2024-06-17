@@ -1,21 +1,21 @@
 package taskmanager.tasks;
 
+import taskmanager.managers.Managers;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
 public class Epic extends Task {
 
-    public Epic(String title, String description, LocalDateTime startTime, Duration duration) {
-        super(title, description, StatusTask.NEW, startTime, duration);
+    public Epic(String title, String description, LocalDateTime startTime) {
+        super(title, description, StatusTask.NEW, startTime, Duration.ZERO);
     }
 
     @Override
     public String toStringToFile() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy - HH:mm");
-        String formatDateTime = this.getStartTime().format(formatter);
+        String formatDateTime = this.getStartTime().format(Managers.timeFormatter);
         return String.format("EPIC,%d,%s,%s,%s,%s,%s\n",
                 this.getTaskId(),
                 this.getTitle(),
@@ -56,7 +56,8 @@ public class Epic extends Task {
     }
 
     public static Epic copyEpic(Epic task) {
-        Epic copy = new Epic(task.getTitle(), task.getDescription(), task.getStartTime(), task.getDuration());
+        Epic copy = new Epic(task.getTitle(), task.getDescription(), task.getStartTime());
+        copy.setDuration(task.getDuration());
         copy.setStatusTask(task.getStatusTask());
         return copy;
     }

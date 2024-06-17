@@ -4,6 +4,7 @@ import taskmanager.tasks.Epic;
 import taskmanager.tasks.Subtask;
 import taskmanager.tasks.Task;
 
+import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
@@ -11,9 +12,13 @@ public interface TaskManager {
 
     TreeSet<Task> getPrioritizedTasks();
 
-    void printOfSubtasksInEpic(int epicId);
+    List<Subtask> getSubtasksInEpic(int epicId);
 
-    void deleteTypeTasks(Object object);
+    void deleteTasks();
+
+    void deleteEpics();
+
+    void deleteSubtasks();
 
     void deleteTasksForID(int taskId);
 
@@ -38,4 +43,10 @@ public interface TaskManager {
     Map<Integer, Epic> getEpics();
 
     Map<Integer, Subtask> getSubtasks();
+
+    List<Task> getHistory();
+
+    void deletePrioritizedList();
+
+    void deleteHistory();
 }

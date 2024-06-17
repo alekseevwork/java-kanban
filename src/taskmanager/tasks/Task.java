@@ -1,8 +1,9 @@
 package taskmanager.tasks;
 
+import taskmanager.managers.Managers;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Task implements Comparable<Task> {
@@ -23,8 +24,7 @@ public class Task implements Comparable<Task> {
     }
 
     public String toStringToFile() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy - HH:mm");
-        String formatDateTime = startTime.format(formatter);
+        String formatDateTime = startTime.format(Managers.timeFormatter);
         return String.format("TASK,%d,%s,%s,%s,%s,%s\n",
                 taskId,
                 title,
@@ -106,7 +106,7 @@ public class Task implements Comparable<Task> {
                 ", taskID=" + taskId +
                 ", statusTask=" + statusTask +
                 ", startTime=" + startTime +
-                ", endTime=" + this.getEndTime() +
+                ", endTime=" + getEndTime() +
                 ", duration=" + duration +
                 '}';
     }

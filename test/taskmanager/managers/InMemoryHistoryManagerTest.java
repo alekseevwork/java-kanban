@@ -36,7 +36,7 @@ class InMemoryHistoryManagerTest {
         historyManager = new InMemoryHistoryManager();
         historyManager.clear();
         task = new Task("titleTask", "desc", StatusTask.NEW, startTime, duration);
-        epic = new Epic("titleEpic", "desc", startTime.plusMinutes(10), Duration.ZERO);
+        epic = new Epic("titleEpic", "desc", startTime.plusMinutes(10));
         subtask = new Subtask(
                 "titleSubtask", "desc", StatusTask.NEW, epic.getTaskId(), startTime.plusMinutes(20), duration
         );
